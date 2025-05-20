@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Techora</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Your entire style.css content goes here */
+  </style>
 </head>
 <body>
   <header>
     <div class="logo">Techora</div>
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <i class="fas fa-ellipsis-v"></i>
-    </div>
-    <div class="dropdown" id="dropdown">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <nav id="dropdown" class="dropdown">
       <a href="#">Home</a>
-      <a href="#products">Products</a>
-      <a href="#contact">Contact</a>
-    </div>
+      <a href="#">Products</a>
+      <a href="#">Contact</a>
+    </nav>
   </header>
 
   <section class="hero">
@@ -25,7 +24,7 @@
     <p>Your one-stop shop for the latest and greatest in tech gear.</p>
   </section>
 
-  <section class="products" id="products">
+  <section class="products">
     <div class="card">
       <img src="images/product1.jpg" alt="Product 1">
       <div class="card-content">
@@ -49,10 +48,15 @@
     </div>
   </section>
 
-  <footer id="contact">
-    <p>Contact us at info@bytecart.com | All rights reserved © 2025</p>
+  <footer>
+    <p>Contact us at info@techora.com | All rights reserved © 2025</p>
   </footer>
 
-<script src="js/script.js"></script>
+  <script>
+    function toggleMenu() {
+      const dropdown = document.getElementById('dropdown');
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    }
+  </script>
 </body>
 </html>

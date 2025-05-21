@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Techora - Cart</title>
-<style>
-  * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif; }
-  body { background:#f9f9f9; color:#333; }
-  header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
-  nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
-  nav ul li { margin:0 15px; }
-  nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
-  nav ul li a:hover { color:#00bcd4; }
-  section { padding:60px 20px; max-width: 900px; margin:auto; }
-  h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
-  table { width:100%; border-collapse: collapse; }
-  th, td { padding:12px 15px; border-bottom:1px solid #ddd; text-align:left; }
-  th { background:#00bcd4; color:#fff; }
-  button.remove-btn {
-    background:#f44336; border:none; color:#fff; padding:6px 12px; border-radius:5px; cursor:pointer;
-  }
-  button.remove-btn:hover { background:#ba000d; }
-  #checkout-btn {
-    margin-top: 20px;
-    background:#00bcd4; border:none; color:#fff; padding:12px 20px; border-radius:6px; font-size:1.1rem; cursor:pointer;
-    float: right;
-  }
-  #checkout-btn:hover { background:#007c91; }
-  #empty-msg {
-    text-align:center; font-size:1.2rem; color:#666; margin-top: 40px;
-  }
-  #floating-cart {
-    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
-  }
-  #floating-cart:hover { background:#007c91; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cart - Techora</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f5f5f5; color: #333; }
+    header, footer { background: #222; color: white; text-align: center; padding: 20px 0; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+    section { max-width: 800px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { padding: 12px; border-bottom: 1px solid #ccc; text-align: left; }
+    .remove-btn { background: red; color: white; padding: 6px 10px; border: none; border-radius: 5px; cursor: pointer; }
+    .checkout-btn { display: block; width: 100%; background: #00bcd4; color: white; padding: 15px; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; }
+    .checkout-btn:hover { background: #0097a7; }
+    #empty-msg { text-align: center; font-size: 1.1rem; margin: 40px 0; }
+  </style>
 </head>
 <body>
+
 <header>
   <h1>Techora</h1>
   <nav>
@@ -53,83 +40,64 @@
 <section>
   <h2>Your Cart</h2>
   <div id="cart-container"></div>
-  <button id="checkout-btn" style="display:none;">Proceed to Checkout</button>
+  <button class="checkout-btn" id="checkout-btn" style="display:none;" onclick="window.location.href='checkout.html'">Proceed to Checkout</button>
 </section>
 
 <footer>
   <p>&copy; 2025 Techora. All rights reserved.</p>
 </footer>
 
-<a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
-
 <script>
-  const cartContainer = document.getElementById('cart-container');
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const container = document.getElementById('cart-container');
   const cartCountSpan = document.getElementById('cart-count');
-  const floatingCountSpan = document.getElementById('floating-count');
   const checkoutBtn = document.getElementById('checkout-btn');
 
-  function loadCart() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    updateCartCount(cart);
+  function updateCartCount() {
+    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountSpan.textContent = total;
+  }
+
+  function removeItem(id) {
+    const index = cart.findIndex(item => item.id === id);
+    if (index > -1) {
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+      updateCartCount();
+    }
+  }
+
+  function renderCart() {
     if (cart.length === 0) {
-      cartContainer.innerHTML = '<p id="empty-msg">Your cart is empty.</p>';
+      container.innerHTML = '<p id="empty-msg">Your cart is empty.</p>';
       checkoutBtn.style.display = 'none';
       return;
     }
 
-    let html = `<table>
-      <thead>
-        <tr>
-          <th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th>Remove</th>
-        </tr>
-      </thead><tbody>`;
+    let html = '<table><tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th>Remove</th></tr>';
+    let grandTotal = 0;
 
-    cart.forEach((item, index) => {
-      const total = (item.price * item.quantity).toFixed(2);
-      html += `
-        <tr>
-          <td>${item.name}</td>
-          <td>$${item.price.toFixed(2)}</td>
-          <td>${item.quantity}</td>
-          <td>$${total}</td>
-          <td><button class="remove-btn" data-index="${index}">Remove</button></td>
-        </tr>
-      `;
+    cart.forEach(item => {
+      const total = item.price * item.quantity;
+      grandTotal += total;
+      html += `<tr>
+        <td>${item.name}</td>
+        <td>$${item.price.toFixed(2)}</td>
+        <td>${item.quantity}</td>
+        <td>$${total.toFixed(2)}</td>
+        <td><button class="remove-btn" onclick="removeItem(${item.id})">X</button></td>
+      </tr>`;
     });
 
-    html += `</tbody></table>`;
-    cartContainer.innerHTML = html;
-    checkoutBtn.style.display = 'inline-block';
-
-    // Add listeners to remove buttons
-    const removeButtons = document.querySelectorAll('.remove-btn');
-    removeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const idx = parseInt(btn.getAttribute('data-index'));
-        removeFromCart(idx);
-      });
-    });
+    html += `<tr><td colspan="3"><strong>Grand Total:</strong></td><td colspan="2"><strong>$${grandTotal.toFixed(2)}</strong></td></tr></table>`;
+    container.innerHTML = html;
+    checkoutBtn.style.display = 'block';
   }
 
-  function updateCartCount(cart) {
-    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCountSpan.textContent = totalCount;
-    floatingCountSpan.textContent = totalCount;
-  }
-
-  function removeFromCart(index) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.splice(index, 1);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    loadCart();
-  }
-
-  // Proceed to checkout click handler placeholder
-  checkoutBtn.addEventListener('click', () => {
-    alert('Checkout page coming soon!');
-  });
-
-  loadCart();
+  renderCart();
+  updateCartCount();
 </script>
+
 </body>
 </html>

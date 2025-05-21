@@ -2,92 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Techora - Cart</title>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background: #f9f9f9;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header, footer {
-      background: #222;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-    }
-    nav ul {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    nav ul li {
-      margin: 0 15px;
-    }
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    nav ul li a:hover {
-      color: #00bcd4;
-    }
-    section {
-      padding: 60px 20px;
-      max-width: 900px;
-      margin: auto;
-      flex-grow: 1;
-    }
-    h2 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 30px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 12px 15px;
-      text-align: center;
-      font-size: 1rem;
-    }
-    th {
-      background-color: #00bcd4;
-      color: white;
-    }
-    button.remove-btn {
-      background-color: #e74c3c;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button.remove-btn:hover {
-      background-color: #c0392b;
-    }
-    p.empty-cart {
-      text-align: center;
-      font-size: 1.2rem;
-      color: #777;
-      margin-top: 40px;
-    }
-    footer p {
-      font-size: 0.9rem;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f9f9f9; color: #333; }
+    header, footer { background: #222; color: white; padding: 20px 0; text-align: center; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+
+    section { padding: 60px 20px; max-width: 900px; margin: auto; }
+    h2 { text-align: center; font-size: 2rem; margin-bottom: 30px; }
+    .cart-items { display: flex; flex-direction: column; gap: 20px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .cart-item-name { font-size: 1.1rem; font-weight: bold; }
+    .cart-item-remove { background-color: #e53935; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    .cart-item-remove:hover { background-color: #c62828; }
+
+    .empty-cart { text-align: center; font-size: 1.2rem; color: #777; }
 
     #floating-cart {
       position: fixed;
@@ -107,26 +41,30 @@
     #floating-cart:hover {
       background-color: #007c91;
     }
+
+    @media (max-width: 768px) {
+      nav ul { flex-direction: column; gap: 10px; }
+      .cart-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Techora</h1>
     <nav>
-      <ul id="nav-list">
+      <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-        <!-- Login/logout will be inserted here -->
       </ul>
     </nav>
   </header>
 
   <section>
     <h2>Your Cart</h2>
-    <div id="cart-container"></div>
+    <div id="cart-items" class="cart-items"></div>
   </section>
 
   <footer>
@@ -136,107 +74,43 @@
   <a href="cart.html" id="floating-cart">🛒</a>
 
   <script>
-    function updateNavLoginStatus() {
-      const navList = document.getElementById('nav-list');
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      const existing = document.getElementById('login-logout');
-      if (existing) navList.removeChild(existing);
-
-      const li = document.createElement('li');
-      li.id = 'login-logout';
-
-      if (loggedInUser) {
-        li.innerHTML = `<a href="#" onclick="logout()">Logout (${loggedInUser})</a>`;
-      } else {
-        li.innerHTML = `<a href="login.html">Login</a>`;
-      }
-      navList.appendChild(li);
-    }
-
-    function logout() {
-      localStorage.removeItem('loggedInUser');
-      alert('You have been logged out.');
-      updateNavLoginStatus();
-      window.location.href = 'index.html';
-    }
-
-    function updateCartCount() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || {};
-      let count = 0;
-      for (const item in cart) {
-        count += cart[item].qty;
-      }
-      document.getElementById('floating-cart').textContent = `🛒 ${count}`;
-    }
-
     function renderCart() {
-      const container = document.getElementById('cart-container');
-      const cart = JSON.parse(localStorage.getItem('cart')) || {};
+      const cartContainer = document.getElementById("cart-items");
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      if (Object.keys(cart).length === 0) {
-        container.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
-        updateCartCount();
+      if (cart.length === 0) {
+        cartContainer.innerHTML = "<p class='empty-cart'>Your cart is empty.</p>";
         return;
       }
 
-      let tableHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      let grandTotal = 0;
-
-      for (const product in cart) {
-        const item = cart[product];
-        const total = item.price * item.qty;
-        grandTotal += total;
-
-        tableHTML += `
-          <tr>
-            <td>${product}</td>
-            <td>$${item.price.toFixed(2)}</td>
-            <td>${item.qty}</td>
-            <td>$${total.toFixed(2)}</td>
-            <td><button class="remove-btn" onclick="removeFromCart('${product}')">Remove</button></td>
-          </tr>
+      cartContainer.innerHTML = "";
+      cart.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <span class="cart-item-name">${item}</span>
+          <button class="cart-item-remove" onclick="removeFromCart(${index})">Remove</button>
         `;
-      }
+        cartContainer.appendChild(div);
+      });
+    }
 
-      tableHTML += `
-          <tr>
-            <th colspan="3">Grand Total</th>
-            <th colspan="2">$${grandTotal.toFixed(2)}</th>
-          </tr>
-          </tbody>
-        </table>
-      `;
-
-      container.innerHTML = tableHTML;
+    function removeFromCart(index) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
       updateCartCount();
     }
 
-    function removeFromCart(product) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || {};
-      if (cart[product]) {
-        delete cart[product];
-        localStorage.setItem('cart', JSON.stringify(cart));
-        renderCart();
-        alert(product + ' removed from cart.');
-      }
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      document.getElementById("floating-cart").textContent = "🛒 " + cart.length;
     }
 
-    // Initialize
-    updateNavLoginStatus();
+    // Run on load
     renderCart();
+    updateCartCount();
   </script>
 </body>
 </html>

@@ -20,6 +20,25 @@
     @media (max-width: 768px) {
       nav ul { flex-direction: column; gap: 10px; }
     }
+  #floating-cart {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #00bcd4;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#floating-cart:hover {
+  background-color: #007c91;
+}
+
   </style>
 </head>
 <body>

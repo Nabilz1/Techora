@@ -70,6 +70,15 @@
 
   <script>
     // You can add interactivity later here
+    // Load cart count from localStorage (if available)
+  document.addEventListener("DOMContentLoaded", () => {
+    const count = localStorage.getItem("cartCount") || 0;
+    const floatingCart = document.getElementById("floating-cart");
+    if (floatingCart) {
+      floatingCart.textContent = `🛒 ${count}`;
+    }
+  });
+    
   </script>
 <a href="cart.html" id="floating-cart">🛒</a>
 

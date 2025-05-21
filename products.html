@@ -12,71 +12,33 @@
   nav ul li { margin:0 15px; }
   nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
   nav ul li a:hover { color:#00bcd4; }
-  main { max-width: 1000px; margin: 40px auto; padding: 20px; }
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(230px,1fr));
-    gap: 25px;
+  section { padding:60px 20px; max-width:1200px; margin:auto; }
+  h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
+  .product-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px; }
+  .product { background:#fff; border-radius:10px; padding:20px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+  .product img { max-width:100%; height:auto; border-radius:5px; }
+  .product h3 { margin-top:15px; font-size:1.2rem; }
+  .product .description {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 10px 0 8px;
+    min-height: 40px;
   }
-  .product-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: box-shadow 0.3s ease;
-  }
-  .product-card:hover {
-    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  }
-  .product-image {
-    width: 100%;
-    height: 170px;
-    object-fit: contain;
-    background: #f6f6f6;
-    cursor: pointer;
-  }
-  .product-info {
-    padding: 15px 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  .product-info h3 {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-    cursor: pointer;
-    color: #007c91;
-  }
-  .product-info h3:hover {
-    text-decoration: underline;
-  }
-  .product-price {
-    font-weight: 700;
+  .product .price {
     font-size: 1.1rem;
+    color: #007c91;
+    font-weight: 700;
     margin-bottom: 15px;
-    color: #0097a7;
   }
-  .add-cart-btn {
-    background: #00bcd4;
-    border: none;
-    color: white;
-    padding: 10px 0;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  .product button { background:#00bcd4; border:none; color:#fff; padding:10px 15px; border-radius:5px; cursor:pointer; font-weight:bold; transition:background-color 0.3s; }
+  .product button:hover { background:#007c91; }
+  .show-more-btn { display:block; margin:40px auto 0; background:#00bcd4; color:#fff; padding:10px 25px; font-size:1rem; border:none; border-radius:5px; cursor:pointer; }
+  .show-more-btn:hover { background:#0097a7; }
+  footer p { font-size:0.9rem; }
+  #floating-cart {
+    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
   }
-  .add-cart-btn:hover {
-    background: #007c91;
-  }
-  #user-area {
-    color:#fff;
-  }
+  #floating-cart:hover { background:#007c91; }
 </style>
 </head>
 <body>
@@ -94,101 +56,86 @@
   </nav>
 </header>
 
-<main>
-  <h2 style="text-align:center; margin-bottom: 30px;">Our Products</h2>
-  <div class="products-grid" id="products-grid">
-    <!-- Products will be loaded here dynamically -->
+<section id="all-products">
+  <h2>All Products</h2>
+  <div class="product-grid" id="product-grid">
+    <!-- Products inserted by script -->
   </div>
-</main>
+</section>
 
 <footer>
   <p>&copy; 2025 Techora. All rights reserved.</p>
 </footer>
 
+<a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
+
 <script>
   const products = [
-    {
-      id: 1,
-      name: 'Gaming Laptop',
-      price: 1199,
-      images: ['laptop1.jpg', 'laptop2.jpg', 'laptop3.jpg'],
-      description: 'Powerful gaming laptop with RTX graphics, 16GB RAM, 512GB SSD, and 144Hz display.'
+    { 
+      id: 1, 
+      name: 'Gaming Laptop', 
+      price: 1299.99, 
+      description: 'High-performance gaming laptop with RTX 3060 GPU and 16GB RAM.', 
+      img: 'gaming-laptop.jpg' 
     },
-    {
-      id: 2,
-      name: 'Desktop PC',
-      price: 999,
-      images: ['desktop1.jpg', 'desktop2.jpg'],
-      description: 'High-performance desktop PC with Intel i7, 16GB RAM, 1TB HDD, and NVIDIA GTX 1660.'
+    { 
+      id: 2, 
+      name: 'Desktop PC', 
+      price: 899.99, 
+      description: 'Powerful desktop with Intel i7 processor and 1TB SSD.', 
+      img: 'desktop-pc.jpg' 
     },
-    {
-      id: 3,
-      name: 'Mechanical Keyboard',
-      price: 89,
-      images: ['keyboard1.jpg', 'keyboard2.jpg'],
-      description: 'RGB backlit mechanical keyboard with blue switches, perfect for gaming and typing.'
+    { 
+      id: 3, 
+      name: 'Mechanical Keyboard', 
+      price: 99.99, 
+      description: 'RGB mechanical keyboard with blue switches for a tactile feel.', 
+      img: 'mechanical-keyboard.jpg' 
     },
-    {
-      id: 4,
-      name: '4K Monitor',
-      price: 349,
-      images: ['monitor1.jpg', 'monitor2.jpg'],
-      description: '27-inch 4K UHD monitor with HDR support and ultra-thin bezels.'
+    { 
+      id: 4, 
+      name: '4K Monitor', 
+      price: 399.99, 
+      description: '27-inch 4K UHD monitor with HDR and 144Hz refresh rate.', 
+      img: '4k-monitor.jpg' 
     },
-    {
-      id: 5,
-      name: 'Gaming Mouse',
-      price: 49,
-      images: ['mouse1.jpg', 'mouse2.jpg'],
-      description: 'Ergonomic gaming mouse with adjustable DPI and customizable buttons.'
+    { 
+      id: 5, 
+      name: 'Gaming Mouse', 
+      price: 59.99, 
+      description: 'Ergonomic gaming mouse with customizable DPI and RGB lighting.', 
+      img: 'gaming-mouse.jpg' 
     },
-    {
-      id: 6,
-      name: '1TB SSD',
-      price: 129,
-      images: ['ssd1.jpg'],
-      description: 'Fast 1TB solid-state drive with NVMe technology for blazing speeds.'
+    { 
+      id: 6, 
+      name: '1TB SSD', 
+      price: 139.99, 
+      description: 'Fast 1TB NVMe SSD for blazing-fast storage performance.', 
+      img: '1tb-ssd.jpg' 
     }
   ];
 
-  const productsGrid = document.getElementById('products-grid');
+  const productGrid = document.getElementById('product-grid');
   const cartCountSpan = document.getElementById('cart-count');
+  const floatingCountSpan = document.getElementById('floating-count');
   const userArea = document.getElementById('user-area');
 
-  function updateUserArea() {
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-    if (loggedInUser && loggedInUser.username) {
-      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${loggedInUser.username}</span> | <a href="#" onclick="logout()">Logout</a>`;
-    } else {
-      userArea.innerHTML = '<a href="login.html">Login</a>';
-    }
-  }
-
-  function logout() {
-    localStorage.removeItem('loggedInUser');
-    window.location.reload();
-  }
-
-  // Render all products as cards
   function renderProducts() {
-    productsGrid.innerHTML = products.map(product => `
-      <div class="product-card">
-        <img src="${product.images[0]}" alt="${product.name}" class="product-image" onclick="openProduct(${product.id})" />
-        <div class="product-info">
-          <h3 onclick="openProduct(${product.id})">${product.name}</h3>
-          <p class="product-price">$${product.price.toFixed(2)}</p>
-          <button class="add-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
-        </div>
-      </div>
-    `).join('');
+    productGrid.innerHTML = '';
+    products.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.name}" />
+        <h3>${p.name}</h3>
+        <p class="description">${p.description}</p>
+        <p class="price">$${p.price.toFixed(2)}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      `;
+      productGrid.appendChild(div);
+    });
   }
 
-  // Navigate to items.html?id=PRODUCT_ID
-  function openProduct(id) {
-    window.location.href = `items.html?id=${id}`;
-  }
-
-  // Add product to cart and update count
   function addToCart(productId) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const index = cart.findIndex(item => item.id === productId);
@@ -200,13 +147,28 @@
     }
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
-    alert(`Added to cart: ${products.find(p => p.id === productId).name}`);
+    alert('Added to cart: ' + products.find(p => p.id === productId).name);
   }
 
   function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCountSpan.textContent = totalCount;
+    floatingCountSpan.textContent = totalCount;
+  }
+
+  function updateUserArea() {
+    const username = localStorage.getItem("username");
+    if (username) {
+      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${username}</span> | <a href="#" onclick="logout()">Logout</a>`;
+    } else {
+      userArea.innerHTML = '<a href="login.html">Login</a>';
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("username");
+    window.location.reload();
   }
 
   window.addEventListener('load', () => {

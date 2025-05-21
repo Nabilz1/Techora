@@ -29,54 +29,49 @@
     @media (max-width: 768px) {
       nav ul { flex-direction: column; gap: 10px; }
     }
-  #floating-cart {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #00bcd4;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  transition: background-color 0.3s;
-}
 
-#floating-cart:hover {
-  background-color: #007c91;
-}
+    #floating-cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #00bcd4;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transition: background-color 0.3s;
+    }
+
+    #floating-cart:hover {
+      background-color: #007c91;
+    }
 
     .btn.pulse {
-    animation: pulse 2s infinite;
-  }
+      animation: pulse 2s infinite;
+    }
 
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-</style>
-
-<script>
-  document.querySelector('.btn').classList.add('pulse');
-    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Techora</h1>
     <nav>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="products.html">Products</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-  </ul>
-</nav>
-
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
+      </ul>
+    </nav>
   </header>
 
   <section id="featured">
@@ -101,7 +96,7 @@
         <button onclick="addToCart('Mechanical Keyboard')">Add to Cart</button>
       </div>
     </div>
-    <button class="show-more-btn" onclick="scrollToFullProducts()">Show More</button>
+    <button class="show-more-btn btn" onclick="scrollToFullProducts()">Show More</button>
   </section>
 
   <section id="all-products">
@@ -132,30 +127,35 @@
     <p>&copy; 2025 Techora. All rights reserved.</p>
   </footer>
 
-  <script>
-    let cartCount = 0;
+  <a href="cart.html" id="floating-cart">🛒</a>
 
+  <script>
     function addToCart(itemName) {
-  let count = localStorage.getItem("cartCount") || 0;
-  count++;
-  localStorage.setItem("cartCount", count);
-  alert(itemName + " added to cart!");
-}
+      let count = localStorage.getItem("cartCount") || 0;
+      count++;
+      localStorage.setItem("cartCount", count);
+      alert(itemName + " added to cart!");
+    }
 
     function scrollToFullProducts() {
       document.getElementById('all-products').scrollIntoView({ behavior: 'smooth' });
     }
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", function(e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute("href")).scrollIntoView({
-        behavior: "smooth"
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.querySelector(".btn");
+      if (btn) {
+        btn.classList.add("pulse");
+      }
+
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute("href")).scrollIntoView({
+            behavior: "smooth"
+          });
+        });
       });
     });
-  });
-    
   </script>
-<a href="cart.html" id="floating-cart">🛒</a>
-
 </body>
 </html>

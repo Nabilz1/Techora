@@ -77,6 +77,20 @@
       event.preventDefault();
       alert("Thank you for contacting Techora. We'll respond as soon as possible!");
     }
+    
+  <script>
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute("href")).scrollIntoView({
+        behavior: "smooth"
+      });
+    });
+  });
+    
+</script>
+
+    
   </script>
 <a href="cart.html" id="floating-cart">🛒</a>
 

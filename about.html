@@ -2,66 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Techora - About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - Techora</title>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background: #f9f9f9;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header, footer {
-      background: #222;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-    }
-    nav ul {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    nav ul li {
-      margin: 0 15px;
-    }
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    nav ul li a:hover {
-      color: #00bcd4;
-    }
-    section {
-      padding: 60px 20px;
-      max-width: 900px;
-      margin: auto;
-      flex-grow: 1;
-    }
-    h2 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #555;
-      text-align: justify;
-    }
-    footer p {
-      font-size: 0.9rem;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f9f9f9; color: #333; }
+    header, footer { background: #222; color: white; padding: 20px 0; text-align: center; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+    section { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
+    h2 { text-align: center; font-size: 2.2rem; margin-bottom: 30px; }
+    p { font-size: 1.1rem; line-height: 1.7; margin-bottom: 20px; }
     #floating-cart {
       position: fixed;
       bottom: 20px;
@@ -80,19 +33,23 @@
     #floating-cart:hover {
       background-color: #007c91;
     }
+
+    @media (max-width: 768px) {
+      nav ul { flex-direction: column; gap: 10px; }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Techora</h1>
     <nav>
-      <ul id="nav-list">
+      <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-        <!-- Login/logout will be inserted here -->
+        <li><a href="cart.html">🛒 Cart</a></li>
+        <li><a href="login.html" id="login-link">Login</a></li>
       </ul>
     </nav>
   </header>
@@ -100,15 +57,14 @@
   <section>
     <h2>About Techora</h2>
     <p>
-      Techora is your trusted online store for high-quality technology products.
-      Founded in 2025, we strive to provide the best devices, peripherals, and accessories
-      to tech enthusiasts and professionals alike. Our mission is to make tech accessible,
-      affordable, and reliable for everyone.
+      Techora was founded in 2025 with a single mission: to deliver top-notch technology products at competitive prices. 
+      Whether you're a hardcore gamer, a home office professional, or simply passionate about electronics, we have something for you.
     </p>
     <p>
-      Whether you are looking for the latest gaming laptop, a powerful desktop PC, or
-      everyday gadgets, Techora offers a wide range of products carefully selected
-      to meet your needs.
+      Our team is made up of tech enthusiasts who believe in quality, innovation, and great service. We source only the best gear – from cutting-edge laptops and desktops to accessories that enhance your everyday life.
+    </p>
+    <p>
+      Based in Jeddah, Techora also offers installation services and expert advice tailored to your needs. With our online platform, we aim to make tech shopping easy, transparent, and enjoyable.
     </p>
   </section>
 
@@ -119,43 +75,12 @@
   <a href="cart.html" id="floating-cart">🛒</a>
 
   <script>
-    // Cart count update
-    function updateCartCount() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || {};
-      let count = 0;
-      for(const item in cart) {
-        count += cart[item].qty;
-      }
-      document.getElementById('floating-cart').textContent = `🛒 ${count}`;
+    const username = localStorage.getItem("username");
+    const loginLink = document.getElementById("login-link");
+    if (username) {
+      loginLink.textContent = `👤 ${username}`;
+      loginLink.href = "#";
     }
-
-    // Nav login/logout status update
-    function updateNavLoginStatus() {
-      const navList = document.getElementById('nav-list');
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      const existing = document.getElementById('login-logout');
-      if(existing) navList.removeChild(existing);
-
-      const li = document.createElement('li');
-      li.id = 'login-logout';
-
-      if(loggedInUser) {
-        li.innerHTML = `<a href="#" onclick="logout()">Logout (${loggedInUser})</a>`;
-      } else {
-        li.innerHTML = `<a href="login.html">Login</a>`;
-      }
-      navList.appendChild(li);
-    }
-
-    function logout() {
-      localStorage.removeItem('loggedInUser');
-      alert('You have been logged out.');
-      updateNavLoginStatus();
-      window.location.href = 'index.html';
-    }
-
-    updateNavLoginStatus();
-    updateCartCount();
   </script>
 </body>
 </html>

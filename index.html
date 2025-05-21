@@ -22,41 +22,34 @@
     @media (max-width: 768px) {
       nav ul { flex-direction: column; gap: 10px; }
     }
-  #floating-cart {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #00bcd4;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  transition: background-color 0.3s;
-}
-
-#floating-cart:hover {
-  background-color: #007c91;
-}
-
+    #floating-cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #00bcd4;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transition: background-color 0.3s;
+    }
+    #floating-cart:hover {
+      background-color: #007c91;
+    }
     .btn.pulse {
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-</style>
-
-<script>
-  document.querySelector('.btn').classList.add('pulse');
-    
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
+
 <body>
   <header>
     <h1>Techora</h1>
@@ -83,27 +76,30 @@
   </footer>
 
   <script>
-    // You can add interactivity later here
-    // Load cart count from localStorage (if available)
   document.addEventListener("DOMContentLoaded", () => {
+    // Animate the main button
+    const shopNowBtn = document.querySelector('.btn');
+    if (shopNowBtn) shopNowBtn.classList.add('pulse');
+
+    // Load cart count from localStorage
     const count = localStorage.getItem("cartCount") || 0;
     const floatingCart = document.getElementById("floating-cart");
     if (floatingCart) {
       floatingCart.textContent = `🛒 ${count}`;
     }
-  });
-  
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", function(e) {
-      e.preventDefault();
-      document.querySelector(this.getAttribute("href")).scrollIntoView({
-        behavior: "smooth"
+
+    // Smooth scroll for internal anchors (not needed if no "#" links)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({
+          behavior: "smooth"
+        });
       });
     });
   });
+</script>
 
-    
-  </script>
 <a href="cart.html" id="floating-cart">🛒</a>
 
 </body>

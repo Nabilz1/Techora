@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Techora - Product Details</title>
+<style>
+  * { margin:0; padding:0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+  body { background:#f9f9f9; color:#333; }
+  header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
+  nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
+  nav ul li { margin:0 15px; }
+  nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
+  nav ul li a:hover { color:#00bcd4; }
+  main { max-width: 900px; margin: 40px auto; background:#fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+  .product-details { display: flex; flex-wrap: wrap; gap: 30px; }
+  .images {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .main-image {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: 400px;
+    object-fit: contain;
+  }
+  .thumbnails {
+    display: flex;
+    gap: 10px;
+  }
+  .thumbnails img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    cursor: pointer;
+    object-fit: contain;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .thumbnails img:hover,
+  .thumbnails img.active {
+    border-color: #00bcd4;
+  }
+  .info {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .info h2 { font-size: 2rem; margin-bottom: 10px; }
+  .info p.description { margin: 20px 0; font-size: 1rem; line-height: 1.4; color: #555; }
+  .info p.price { font-size: 1.5rem; font-weight: 700; color: #0097a7; margin-bottom: 30px; }
+  .info button {
+    background:#00bcd4; border:none; color:#fff; padding:15px 0; font-size:1.2rem;
+    border-radius: 8px; cursor:pointer; font-weight:bold; transition: background-color 0.3s;
+  }
+  .info button:hover { background:#007c91; }
+  footer p { font-size:0.9rem; }
+  #user-area {
+    color:#fff;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Techora</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li id="user-area"><a href="login.html">Login</a></li>
+      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <div class="product-details" id="product-details">
+    <!-- Dynamic content inserted here -->
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 Techora. All rights reserved.</p>
+</footer>
+
+<script>
+  // Sample product data with multiple images & description for each product
+  const products = [
+    {
+      id: 1,
+      name: 'Gaming Laptop',
+      price: 1199,
+      images: ['laptop1.jpg', 'laptop2.jpg', 'laptop3.jpg'],
+      description: 'Powerful gaming laptop with RTX graphics, 16GB RAM, 512GB SSD, and 144Hz display.'
+    },
+    {
+      id: 2,
+      name: 'Desktop PC',
+      price: 999,
+      images: ['desktop1.jpg', 'desktop2.jpg'],
+      description: 'High-performance desktop PC with Intel i7, 16GB RAM, 1TB HDD, and NVIDIA GTX 1660.'
+    },
+    {
+      id: 3,
+      name: 'Mechanical Keyboard',
+      price: 89,
+      images: ['keyboard1.jpg', 'keyboard2.jpg'],
+      description: 'RGB backlit mechanical keyboard with blue switches, perfect for gaming and typing.'
+    },
+    {
+      id: 4,
+      name: '4K Monitor',
+      price: 349,
+      images: ['monitor1.jpg', 'monitor2.jpg'],
+      description: '27-inch 4K UHD monitor with HDR support and ultra-thin bezels.'
+    },
+    {
+      id: 5,
+      name: 'Gaming Mouse',
+      price: 49,
+      images: ['mouse1.jpg', 'mouse2.jpg'],
+      description: 'Ergonomic gaming mouse with adjustable DPI and customizable buttons.'
+    },
+    {
+      id: 6,
+      name: '1TB SSD',
+      price: 129,
+      images: ['ssd1.jpg'],
+      description: 'Fast 1TB solid-state drive with NVMe technology for blazing speeds.'
+    }
+  ];
+
+  // Utility to get query param by name
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  // Elements references
+  const productDetailsDiv = document.getElementById('product-details');
+  const cartCountSpan = document.getElementById('cart-count');
+  const userArea = document.getElementById('user-area');
+
+  // Load logged-in username for user area
+  function updateUserArea() {
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+    if (loggedInUser && loggedInUser.username) {
+      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${loggedInUser.username}</span> | <a href="#" onclick="logout()">Logout</a>`;
+    } else {
+      userArea.innerHTML = '<a href="login.html">Login</a>';
+    }
+  }
+
+  // Logout function
+  function logout() {
+    localStorage.removeItem('loggedInUser');
+    window.location.reload();
+  }
+
+  // Render product info with images
+  function renderProduct(product) {
+    if (!product) {
+      productDetailsDiv.innerHTML = `<p style="text-align:center; font-size:1.2rem; color:#900;">Product not found.</p>`;
+      return;
+    }
+
+    // Build images section
+    const imagesHTML = `
+      <div class="images">
+        <img id="main-image" src="${product.images[0]}" alt="${product.name}" class="main-image" />
+        <div class="thumbnails">
+          ${product.images.map((img, idx) => `
+            <img src="${img}" alt="${product.name} image ${idx + 1}" class="${idx === 0 ? 'active' : ''}" onclick="changeMainImage(this)" />
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    // Build info section
+    const infoHTML = `
+      <div class="info">
+        <h2>${product.name}</h2>
+        <p class="price">$${product.price.toFixed(2)}</p>
+        <p class="description">${product.description}</p>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+      </div>
+    `;
+
+    productDetailsDiv.innerHTML = imagesHTML + infoHTML;
+  }
+
+  // Change main image when thumbnail clicked
+  function changeMainImage(imgElement) {
+    const mainImage = document.getElementById('main-image');
+    mainImage.src = imgElement.src;
+
+    // Update active thumbnail border
+    const thumbnails = imgElement.parentElement.querySelectorAll('img');
+    thumbnails.forEach(img => img.classList.remove('active'));
+    imgElement.classList.add('active');
+  }
+
+  // Add to cart function (similar to products page)
+  function addToCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const index = cart.findIndex(item => item.id === productId);
+    if (index > -1) {
+      cart[index].quantity++;
+    } else {
+      const product = products.find(p => p.id === productId);
+      cart.push({...product, quantity: 1});
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    alert(`Added to cart: ${products.find(p => p.id === productId).name}`);
+  }
+
+  // Update cart count in nav
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountSpan.textContent = totalCount;
+  }
+
+  // On page load
+  window.addEventListener('load', () => {
+    const productId = parseInt(getQueryParam('id'));
+    const product = products.find(p => p.id === productId);
+    renderProduct(product);
+    updateCartCount();
+    updateUserArea();
+  });
+</script>
+</body>
+</html>

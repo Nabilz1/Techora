@@ -1,41 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Techora - Contact</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
-    body { background:#f9f9f9; color:#333; }
-    header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
-    nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
-    nav ul li { margin:0 15px; }
-    nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
-    nav ul li a:hover { color:#00bcd4; }
-    section { padding:60px 20px; max-width:600px; margin:auto; background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-    h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
-    form { display:flex; flex-direction:column; }
-    input, textarea {
-      margin-bottom:20px; padding:12px; border:1px solid #ccc;
-      border-radius:5px; font-size:1rem;
-    }
-    textarea { resize:vertical; min-height:120px; }
-    button {
-      padding:12px; background:#00bcd4; color:#fff; font-size:1rem;
-      border:none; border-radius:5px; cursor:pointer; font-weight:bold;
-    }
-    button:hover { background:#0097a7; }
-    footer p { font-size:0.9rem; }
-    #floating-cart {
-      position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff;
-      padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none;
-      box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
-    }
-    #floating-cart:hover { background:#007c91; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Techora - Contact</title>
+<style>
+  * { margin:0; padding:0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+  body { background:#f9f9f9; color:#333; }
+  header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
+  nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
+  nav ul li { margin:0 15px; }
+  nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
+  nav ul li a:hover { color:#00bcd4; }
+  section { padding:60px 20px; max-width:600px; margin:auto; }
+  h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
+  form { background:#fff; padding:25px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+  label { display:block; margin-bottom:8px; font-weight:600; }
+  input, textarea { width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:5px; font-size:1rem; }
+  button { background:#00bcd4; border:none; color:#fff; padding:12px 20px; border-radius:5px; font-weight:bold; cursor:pointer; transition:background-color 0.3s; }
+  button:hover { background:#007c91; }
+  footer p { font-size:0.9rem; text-align:center; }
+  #floating-cart {
+    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
+  }
+  #floating-cart:hover { background:#007c91; }
+</style>
 </head>
 <body>
-
 <header>
   <h1>Techora</h1>
   <nav>
@@ -44,17 +35,24 @@
       <li><a href="products.html">Products</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+      <li id="user-area"><a href="login.html">Login</a></li>
+      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
     </ul>
   </nav>
 </header>
 
 <section>
   <h2>Contact Us</h2>
-  <form onsubmit="submitContact(event)">
-    <input type="text" id="name" placeholder="Your Name" required />
-    <input type="email" id="email" placeholder="Your Email" required />
-    <textarea id="message" placeholder="Your Message" required></textarea>
+  <form id="contact-form">
+    <label for="name">Your Name:</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" rows="5" required></textarea>
+
     <button type="submit">Send Message</button>
   </form>
 </section>
@@ -66,33 +64,41 @@
 <a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
 
 <script>
-  // Handle contact form submission
-  function submitContact(e) {
-    e.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
+  const cartCountSpan = document.getElementById('cart-count');
+  const floatingCountSpan = document.getElementById('floating-count');
+  const userArea = document.getElementById('user-area');
 
-    if (name && email && message) {
-      alert(`Thank you, ${name}! Your message has been sent.`);
-      // Clear form
-      document.getElementById('name').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('message').value = '';
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountSpan.textContent = totalCount;
+    floatingCountSpan.textContent = totalCount;
+  }
+
+  function updateUserArea() {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser && loggedInUser.username) {
+      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${loggedInUser.username}</span> | <a href="#" onclick="logout()">Logout</a>`;
     } else {
-      alert('Please fill in all fields.');
+      userArea.innerHTML = '<a href="login.html">Login</a>';
     }
   }
 
-  // Cart count
-  function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('cart-count').textContent = total;
-    document.getElementById('floating-count').textContent = total;
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.reload();
   }
 
-  updateCartCount();
+  window.addEventListener('load', () => {
+    updateCartCount();
+    updateUserArea();
+  });
+
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Thank you for contacting us, ' + this.name.value + '!');
+    this.reset();
+  });
 </script>
 </body>
 </html>

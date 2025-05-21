@@ -59,6 +59,7 @@
 <a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
 
 <script>
+  // Product list
   const products = [
     { id: 1, name: 'Gaming Laptop', price: 1199, img: 'laptop.jpg' },
     { id: 2, name: 'Desktop PC', price: 999, img: 'desktop.jpg' },
@@ -109,6 +110,7 @@
     floatingCountSpan.textContent = totalCount;
   }
 
+  // Update the login/logout user area dynamically
   function updateUserArea() {
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (loggedInUser && loggedInUser.username) {
@@ -123,7 +125,6 @@
     window.location.reload();
   }
 
-  // Initialize everything after DOM fully loads
   window.addEventListener('load', () => {
     renderProducts();
     updateCartCount();

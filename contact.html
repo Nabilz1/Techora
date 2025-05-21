@@ -2,93 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Techora - Contact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact - Techora</title>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    body {
-      background: #f9f9f9;
-      color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header, footer {
-      background: #222;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-    }
-    nav ul {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    nav ul li {
-      margin: 0 15px;
-    }
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    nav ul li a:hover {
-      color: #00bcd4;
-    }
-    section {
-      padding: 60px 20px;
-      max-width: 700px;
-      margin: auto;
-      flex-grow: 1;
-    }
-    h2 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    label {
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: #555;
-    }
-    input, textarea {
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      resize: vertical;
-    }
-    textarea {
-      min-height: 120px;
-    }
-    button {
-      background-color: #00bcd4;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 5px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #007c91;
-    }
-    footer p {
-      font-size: 0.9rem;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f4f4f4; color: #333; }
+    header, footer { background: #222; color: white; padding: 20px 0; text-align: center; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+    section { max-width: 800px; margin: 60px auto; padding: 0 20px; }
+    h2 { text-align: center; font-size: 2rem; margin-bottom: 30px; }
+    form { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 12px; margin-top: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; }
+    button { margin-top: 20px; background-color: #00bcd4; color: white; border: none; padding: 12px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    button:hover { background-color: #007c91; }
     #floating-cart {
       position: fixed;
       bottom: 20px;
@@ -107,32 +37,39 @@
     #floating-cart:hover {
       background-color: #007c91;
     }
+
+    @media (max-width: 768px) {
+      nav ul { flex-direction: column; gap: 10px; }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>Techora</h1>
     <nav>
-      <ul id="nav-list">
+      <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-        <!-- Login/logout will be inserted here -->
+        <li><a href="cart.html">🛒 Cart</a></li>
+        <li><a href="login.html" id="login-link">Login</a></li>
       </ul>
     </nav>
   </header>
 
   <section>
     <h2>Contact Us</h2>
-    <form onsubmit="submitContact(event)">
+    <form onsubmit="submitForm(event)">
       <label for="name">Name:</label>
       <input type="text" id="name" required />
+
       <label for="email">Email:</label>
       <input type="email" id="email" required />
+
       <label for="message">Message:</label>
-      <textarea id="message" required></textarea>
+      <textarea id="message" rows="6" required></textarea>
+
       <button type="submit">Send Message</button>
     </form>
   </section>
@@ -144,50 +81,18 @@
   <a href="cart.html" id="floating-cart">🛒</a>
 
   <script>
-    // Cart count update
-    function updateCartCount() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || {};
-      let count = 0;
-      for(const item in cart) {
-        count += cart[item].qty;
-      }
-      document.getElementById('floating-cart').textContent = `🛒 ${count}`;
-    }
-
-    // Nav login/logout status update
-    function updateNavLoginStatus() {
-      const navList = document.getElementById('nav-list');
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      const existing = document.getElementById('login-logout');
-      if(existing) navList.removeChild(existing);
-
-      const li = document.createElement('li');
-      li.id = 'login-logout';
-
-      if(loggedInUser) {
-        li.innerHTML = `<a href="#" onclick="logout()">Logout (${loggedInUser})</a>`;
-      } else {
-        li.innerHTML = `<a href="login.html">Login</a>`;
-      }
-      navList.appendChild(li);
-    }
-
-    function logout() {
-      localStorage.removeItem('loggedInUser');
-      alert('You have been logged out.');
-      updateNavLoginStatus();
-      window.location.href = 'index.html';
-    }
-
-    function submitContact(e) {
+    function submitForm(e) {
       e.preventDefault();
-      alert('Thank you for contacting us, ' + document.getElementById('name').value + '!');
-      // Clear form
-      e.target.reset();
+      alert("Message sent successfully!");
+      document.querySelector("form").reset();
     }
 
-    updateNavLoginStatus();
-    updateCartCount();
+    const username = localStorage.getItem("username");
+    const loginLink = document.getElementById("login-link");
+    if (username) {
+      loginLink.textContent = `👤 ${username}`;
+      loginLink.href = "#";
+    }
   </script>
 </body>
 </html>

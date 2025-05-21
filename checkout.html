@@ -1,29 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Techora - Checkout</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
-    body { background:#f9f9f9; color:#333; padding-bottom: 50px; }
-    header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
-    nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
-    nav ul li { margin:0 15px; }
-    nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
-    nav ul li a:hover { color:#00bcd4; }
-    section { max-width:900px; margin:40px auto; padding:20px; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.1); border-radius:10px; }
-    h2 { margin-bottom:20px; text-align:center; }
-    table { width:100%; border-collapse:collapse; margin-bottom:20px; }
-    th, td { border-bottom:1px solid #ddd; padding:10px; text-align:left; }
-    th { background:#00bcd4; color:#fff; }
-    form label { display:block; margin-top:10px; font-weight:bold; }
-    form input, form textarea { width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:5px; }
-    #paypal-button-container { margin-top:20px; }
-    footer p { font-size:0.9rem; margin-top:20px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Techora - Checkout</title>
+<style>
+  * { margin:0; padding:0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+  body { background:#f9f9f9; color:#333; }
+  header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
+  nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
+  nav ul li { margin:0 15px; }
+  nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
+  nav ul li a:hover { color:#00bcd4; }
+  section { padding:40px 20px; max-width: 600px; margin:auto; background:#fff; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+  h2 { text-align:center; margin-bottom:25px; }
+  label { display:block; margin-top:15px; font-weight:600; }
+  input[type=text], input[type=email], input[type=tel] {
+    width: 100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:5px; font-size:1rem;
+  }
+  #order-summary {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  #order-summary th, #order-summary td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  #order-summary th {
+    background:#00bcd4;
+    color: #fff;
+  }
+  #payment-section {
+    margin-top: 25px;
+  }
+  button {
+    margin-top: 25px;
+    background:#00bcd4; border:none; color:#fff; padding:12px 20px; border-radius:6px; font-size:1.1rem; cursor:pointer;
+  }
+  button:hover { background:#007c91; }
+  #floating-cart {
+    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
+  }
+  #floating-cart:hover { background:#007c91; }
+</style>
 </head>
 <body>
+
 <header>
   <h1>Techora</h1>
   <nav>
@@ -32,102 +55,147 @@
       <li><a href="products.html">Products</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+      <li id="login-nav-item"><a href="login.html">Login</a></li>
+      <li id="logout-nav-item" style="display:none;"><a href="#" id="logout-btn">Logout</a></li>
     </ul>
   </nav>
 </header>
 
 <section>
   <h2>Checkout</h2>
-  <div id="order-summary"></div>
+
+  <table id="order-summary">
+    <thead>
+      <tr>
+        <th>Product</th><th>Quantity</th><th>Price</th><th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="order-items">
+      <!-- Items inserted by script -->
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="3" style="text-align:right;">Grand Total:</th>
+        <th id="grand-total">$0.00</th>
+      </tr>
+    </tfoot>
+  </table>
 
   <form id="delivery-form">
-    <h3>Delivery Details</h3>
-    <label for="name">Full Name</label>
-    <input type="text" id="name" required>
+    <label for="fullname">Full Name</label>
+    <input type="text" id="fullname" required />
     <label for="address">Address</label>
-    <textarea id="address" rows="3" required></textarea>
-    <label for="phone">Phone</label>
-    <input type="text" id="phone" required>
-  </form>
+    <input type="text" id="address" required />
+    <label for="email">Email</label>
+    <input type="email" id="email" required />
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" required />
 
-  <div id="paypal-button-container"></div>
+    <div id="payment-section">
+      <h3>Payment Method</h3>
+      <input type="radio" id="paypal" name="payment" value="paypal" checked />
+      <label for="paypal">Pay with PayPal</label>
+    </div>
+
+    <button type="submit">Confirm and Pay</button>
+  </form>
 </section>
 
 <footer>
   <p>&copy; 2025 Techora. All rights reserved.</p>
 </footer>
 
-<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
-<script>
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const user = JSON.parse(localStorage.getItem('user'));
-  const cartCountSpan = document.getElementById('cart-count');
+<a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
 
-  function updateCartCount() {
-    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCountSpan.textContent = totalCount;
-  }
+<script>
+  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+  const cartCountSpan = document.getElementById('cart-count');
+  const floatingCountSpan = document.getElementById('floating-count');
+  const loginNavItem = document.getElementById('login-nav-item');
+  const logoutNavItem = document.getElementById('logout-nav-item');
+  const logoutBtn = document.getElementById('logout-btn');
 
   // Redirect to login if not logged in
-  if (!user) {
-    alert("You must be logged in to proceed to checkout.");
-    window.location.href = "login.html";
+  if (!loggedInUser) {
+    alert('Please log in to proceed with checkout.');
+    window.location.href = 'login.html';
   }
 
-  // Show order summary
-  const orderSummaryDiv = document.getElementById("order-summary");
-  let total = 0;
-  let summaryHTML = `<h3>Order Summary</h3><table><thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th></tr></thead><tbody>`;
-  cart.forEach(item => {
-    const itemTotal = item.price * item.quantity;
-    total += itemTotal;
-    summaryHTML += `<tr><td>${item.name}</td><td>$${item.price.toFixed(2)}</td><td>${item.quantity}</td><td>$${itemTotal.toFixed(2)}</td></tr>`;
-  });
-  summaryHTML += `</tbody></table><p><strong>Grand Total: $${total.toFixed(2)}</strong></p>`;
-  orderSummaryDiv.innerHTML = summaryHTML;
-
-  // PayPal Integration
-  paypal.Buttons({
-    createOrder: function(data, actions) {
-      const name = document.getElementById('name').value;
-      const address = document.getElementById('address').value;
-      const phone = document.getElementById('phone').value;
-
-      if (!name || !address || !phone) {
-        alert("Please fill out delivery details.");
-        return actions.reject();
-      }
-
-      return actions.order.create({
-        purchase_units: [{
-          amount: {
-            value: total.toFixed(2)
-          },
-          payee: {
-            email_address: "Nabil.R1q@gmail.com"
-          },
-          shipping: {
-            name: { full_name: name },
-            address: {
-              address_line_1: address,
-              admin_area_2: "Jeddah",
-              country_code: "SA"
-            }
-          }
-        }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        alert('Payment completed by ' + details.payer.name.given_name + '! Thank you.');
-        localStorage.removeItem('cart');
-        window.location.href = "index.html";
-      });
+  // Update login/logout nav links
+  function updateLoginStatus() {
+    if (loggedInUser) {
+      loginNavItem.style.display = 'none';
+      logoutNavItem.style.display = 'inline-block';
+    } else {
+      loginNavItem.style.display = 'inline-block';
+      logoutNavItem.style.display = 'none';
     }
-  }).render('#paypal-button-container');
+  }
 
+  // Update cart count display
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountSpan.textContent = totalCount;
+    floatingCountSpan.textContent = totalCount;
+  }
+
+  // Fill order summary table
+  function fillOrderSummary() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const tbody = document.getElementById('order-items');
+    tbody.innerHTML = '';
+    let grandTotal = 0;
+    cart.forEach(item => {
+      const row = document.createElement('tr');
+      const totalPrice = item.price * item.quantity;
+      grandTotal += totalPrice;
+
+      row.innerHTML = `
+        <td>${item.name}</td>
+        <td>${item.quantity}</td>
+        <td>$${item.price.toFixed(2)}</td>
+        <td>$${totalPrice.toFixed(2)}</td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    document.getElementById('grand-total').textContent = `$${grandTotal.toFixed(2)}`;
+  }
+
+  // Handle logout
+  logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    localStorage.removeItem('loggedInUser');
+    updateLoginStatus();
+    alert('Logged out successfully.');
+    window.location.href = 'index.html';
+  });
+
+  // Handle form submit for payment (simulate PayPal payment flow)
+  document.getElementById('delivery-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Validate form is handled by required fields already
+
+    // Normally here you would integrate PayPal SDK and process payment
+    // For demo, just show alert and clear cart
+
+    alert('Payment processed successfully!\nThank you for your order, ' + loggedInUser.username + '.');
+
+    localStorage.removeItem('cart');
+    updateCartCount();
+
+    // Redirect to home or order confirmation page
+    window.location.href = 'index.html';
+  });
+
+  // Initial setup
+  updateLoginStatus();
   updateCartCount();
+  fillOrderSummary();
 </script>
+
 </body>
 </html>

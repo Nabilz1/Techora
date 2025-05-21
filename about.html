@@ -2,40 +2,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Techora - About</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<script defer src="script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - Techora</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f9f9f9; color: #333; }
+    header, footer { background: #222; color: white; padding: 20px 0; text-align: center; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+    section { padding: 60px 20px; max-width: 1000px; margin: auto; line-height: 1.8; }
+    h2 { text-align: center; font-size: 2rem; margin-bottom: 30px; }
+    p { text-align: center; font-size: 1.1rem; }
 
+    @media (max-width: 768px) {
+      nav ul { flex-direction: column; gap: 10px; }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>Techora</h1>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="products.html">Products</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
+    <h1>Techora</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <section class="about">
-    <div class="container">
-      <h2>About Us</h2>
-      <p>Techora is dedicated to providing high-quality tech products and excellent customer service. Whether you're a gamer, a student, or a professional, we've got what you need.</p>
-    </div>
+  <section>
+    <h2>About Us</h2>
+    <p>
+      Techora is your go-to destination for cutting-edge computers, accessories, and electronics.
+      We are passionate about bringing the best technology to your fingertips—whether you're a gamer,
+      a creative professional, or simply someone who appreciates reliable tech.
+    </p>
+    <p style="margin-top: 20px;">
+      Since our founding in 2025, we’ve built a reputation for excellent customer service, high-quality
+      products, and a hassle-free shopping experience both online and offline.
+    </p>
   </section>
 
   <footer>
-    <div class="container">
-      <p>&copy; 2025 Techora. All rights reserved.</p>
-    </div>
+    <p>&copy; 2025 Techora. All rights reserved.</p>
   </footer>
 </body>
 </html>

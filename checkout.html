@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout - Techora</title>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f5f5f5; color: #333; }
+    header, footer { background: #222; color: white; text-align: center; padding: 20px 0; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+    section { max-width: 800px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; margin-bottom: 20px; }
+    .summary-table, .delivery-form { width: 100%; margin-bottom: 30px; }
+    .summary-table th, .summary-table td { text-align: left; padding: 10px; border-bottom: 1px solid #ccc; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ccc; }
+    #paypal-button-container { margin-top: 20px; }
+    #message { text-align: center; color: green; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Techora</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section>
+  <h2>Checkout</h2>
+
+  <div id="message"></div>
+
+  <h3>Order Summary</h3>
+  <table class="summary-table" id="summary-table">
+    <!-- Summary inserted by JS -->
+  </table>
+
+  <h3>Delivery Details</h3>
+  <form class="delivery-form" id="delivery-form">
+    <label for="fullName">Full Name:</label>
+    <input type="text" id="fullName" required />
+    <label for="address">Address:</label>
+    <textarea id="address" rows="3" required></textarea>
+    <label for="phone">Phone Number:</label>
+    <input type="tel" id="phone" required />
+  </form>
+
+  <h3>Payment</h3>
+  <div id="paypal-button-container"></div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Techora. All rights reserved.</p>
+</footer>
+
+<script>
+  // Check login
+  const user = localStorage.getItem('loggedInUser');
+  if (!user) {
+    alert('You must be logged in to proceed to checkout.');
+    window.location.href = 'login.html';
+  }
+
+  // Load cart and show summary
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const table = document.getElementById('summary-table');
+  const cartCount = document.getElementById('cart-count');
+  const messageDiv = document.getElementById('message');
+
+  function updateCartCount() {
+    const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = total;
+  }
+
+  function showSummary() {
+    if (cart.length === 0) {
+      table.innerHTML = '<tr><td colspan="4">Your cart is empty.</td></tr>';
+      return;
+    }
+
+    let html = '<tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th></tr>';
+    let grandTotal = 0;
+
+    cart.forEach(item => {
+      const total = item.price * item.quantity;
+      grandTotal += total;
+      html += `<tr>
+        <td>${item.name}</td>
+        <td>$${item.price.toFixed(2)}</td>
+        <td>${item.quantity}</td>
+        <td>$${total.toFixed(2)}</td>
+      </tr>`;
+    });
+
+    html += `<tr>
+      <td colspan="3"><strong>Grand Total:</strong></td>
+      <td><strong>$${grandTotal.toFixed(2)}</strong></td>
+    </tr>`;
+
+    table.innerHTML = html;
+  }
+
+  updateCartCount();
+  showSummary();
+
+  // PayPal button integration
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      const form = document.getElementById('delivery-form');
+      if (!form.reportValidity()) return;
+
+      const grandTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: grandTotal
+          },
+          payee: {
+            email_address: 'Nabil.R1q@gmail.com'
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        messageDiv.textContent = 'Payment completed by ' + details.payer.name.given_name + '!';
+        localStorage.removeItem('cart');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2500);
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
+
+</body>
+</html>

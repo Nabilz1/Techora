@@ -1,116 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Techora - Cart</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background: #f9f9f9; color: #333; }
-    header, footer { background: #222; color: white; padding: 20px 0; text-align: center; }
-    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
-    nav ul li { margin: 0 15px; }
-    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
-    nav ul li a:hover { color: #00bcd4; }
-
-    section { padding: 60px 20px; max-width: 900px; margin: auto; }
-    h2 { text-align: center; font-size: 2rem; margin-bottom: 30px; }
-    .cart-items { display: flex; flex-direction: column; gap: 20px; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .cart-item-name { font-size: 1.1rem; font-weight: bold; }
-    .cart-item-remove { background-color: #e53935; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
-    .cart-item-remove:hover { background-color: #c62828; }
-
-    .empty-cart { text-align: center; font-size: 1.2rem; color: #777; }
-
-    #floating-cart {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #00bcd4;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      transition: background-color 0.3s;
-    }
-
-    #floating-cart:hover {
-      background-color: #007c91;
-    }
-
-    @media (max-width: 768px) {
-      nav ul { flex-direction: column; gap: 10px; }
-      .cart-item { flex-direction: column; align-items: flex-start; gap: 10px; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Techora - Cart</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif; }
+  body { background:#f9f9f9; color:#333; }
+  header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
+  nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
+  nav ul li { margin:0 15px; }
+  nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
+  nav ul li a:hover { color:#00bcd4; }
+  section { padding:60px 20px; max-width: 900px; margin:auto; }
+  h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
+  table { width:100%; border-collapse: collapse; }
+  th, td { padding:12px 15px; border-bottom:1px solid #ddd; text-align:left; }
+  th { background:#00bcd4; color:#fff; }
+  button.remove-btn {
+    background:#f44336; border:none; color:#fff; padding:6px 12px; border-radius:5px; cursor:pointer;
+  }
+  button.remove-btn:hover { background:#ba000d; }
+  #checkout-btn {
+    margin-top: 20px;
+    background:#00bcd4; border:none; color:#fff; padding:12px 20px; border-radius:6px; font-size:1.1rem; cursor:pointer;
+    float: right;
+  }
+  #checkout-btn:hover { background:#007c91; }
+  #empty-msg {
+    text-align:center; font-size:1.2rem; color:#666; margin-top: 40px;
+  }
+  #floating-cart {
+    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
+  }
+  #floating-cart:hover { background:#007c91; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>Techora</h1>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-      </ul>
-    </nav>
-  </header>
+<header>
+  <h1>Techora</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+    </ul>
+  </nav>
+</header>
 
-  <section>
-    <h2>Your Cart</h2>
-    <div id="cart-items" class="cart-items"></div>
-  </section>
+<section>
+  <h2>Your Cart</h2>
+  <div id="cart-container"></div>
+  <button id="checkout-btn" style="display:none;">Proceed to Checkout</button>
+</section>
 
-  <footer>
-    <p>&copy; 2025 Techora. All rights reserved.</p>
-  </footer>
+<footer>
+  <p>&copy; 2025 Techora. All rights reserved.</p>
+</footer>
 
-  <a href="cart.html" id="floating-cart">🛒</a>
+<a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
 
-  <script>
-    function renderCart() {
-      const cartContainer = document.getElementById("cart-items");
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+<script>
+  const cartContainer = document.getElementById('cart-container');
+  const cartCountSpan = document.getElementById('cart-count');
+  const floatingCountSpan = document.getElementById('floating-count');
+  const checkoutBtn = document.getElementById('checkout-btn');
 
-      if (cart.length === 0) {
-        cartContainer.innerHTML = "<p class='empty-cart'>Your cart is empty.</p>";
-        return;
-      }
+  function loadCart() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    updateCartCount(cart);
+    if (cart.length === 0) {
+      cartContainer.innerHTML = '<p id="empty-msg">Your cart is empty.</p>';
+      checkoutBtn.style.display = 'none';
+      return;
+    }
 
-      cartContainer.innerHTML = "";
-      cart.forEach((item, index) => {
-        const div = document.createElement("div");
-        div.className = "cart-item";
-        div.innerHTML = `
-          <span class="cart-item-name">${item}</span>
-          <button class="cart-item-remove" onclick="removeFromCart(${index})">Remove</button>
-        `;
-        cartContainer.appendChild(div);
+    let html = `<table>
+      <thead>
+        <tr>
+          <th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th>Remove</th>
+        </tr>
+      </thead><tbody>`;
+
+    cart.forEach((item, index) => {
+      const total = (item.price * item.quantity).toFixed(2);
+      html += `
+        <tr>
+          <td>${item.name}</td>
+          <td>$${item.price.toFixed(2)}</td>
+          <td>${item.quantity}</td>
+          <td>$${total}</td>
+          <td><button class="remove-btn" data-index="${index}">Remove</button></td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+    cartContainer.innerHTML = html;
+    checkoutBtn.style.display = 'inline-block';
+
+    // Add listeners to remove buttons
+    const removeButtons = document.querySelectorAll('.remove-btn');
+    removeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.getAttribute('data-index'));
+        removeFromCart(idx);
       });
-    }
+    });
+  }
 
-    function removeFromCart(index) {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-      updateCartCount();
-    }
+  function updateCartCount(cart) {
+    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCountSpan.textContent = totalCount;
+    floatingCountSpan.textContent = totalCount;
+  }
 
-    function updateCartCount() {
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      document.getElementById("floating-cart").textContent = "🛒 " + cart.length;
-    }
+  function removeFromCart(index) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    loadCart();
+  }
 
-    // Run on load
-    renderCart();
-    updateCartCount();
-  </script>
+  // Proceed to checkout click handler placeholder
+  checkoutBtn.addEventListener('click', () => {
+    alert('Checkout page coming soon!');
+  });
+
+  loadCart();
+</script>
 </body>
 </html>

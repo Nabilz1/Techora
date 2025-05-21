@@ -121,10 +121,12 @@
   <script>
     let cartCount = 0;
 
-    function addToCart(item) {
-      cartCount++;
-      alert(`${item} added to cart!`);
-    }
+    function addToCart(itemName) {
+  let count = localStorage.getItem("cartCount") || 0;
+  count++;
+  localStorage.setItem("cartCount", count);
+  alert(itemName + " added to cart!");
+}
 
     function scrollToFullProducts() {
       document.getElementById('all-products').scrollIntoView({ behavior: 'smooth' });

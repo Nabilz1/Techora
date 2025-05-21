@@ -21,10 +21,7 @@
     .product p { margin: 10px 0; font-size: 1.1rem; color: #0097a7; font-weight: bold; }
     .product button { background-color: #00bcd4; border: none; color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s; }
     .product button:hover { background-color: #007c91; }
-    .show-more-btn { display: block; margin: 40px auto 0; background-color: #00bcd4; color: white; padding: 10px 25px; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
-    .show-more-btn:hover { background-color: #0097a7; }
     footer p { font-size: 0.9rem; }
-
     @media (max-width: 768px) {
       nav ul { flex-direction: column; gap: 10px; }
     }
@@ -69,8 +66,8 @@
     </nav>
   </header>
 
-  <section id="featured">
-    <h2>Featured Products</h2>
+  <section id="all-products">
+    <h2>All Products</h2>
     <div class="product-grid">
       <div class="product">
         <img src="laptop.jpg" alt="Gaming Laptop" />
@@ -90,8 +87,25 @@
         <p>$89.00</p>
         <button onclick="addToCart('Mechanical Keyboard', 89)">Add to Cart</button>
       </div>
+      <div class="product">
+        <img src="monitor.jpg" alt="4K Monitor" />
+        <h3>4K Monitor</h3>
+        <p>$349.00</p>
+        <button onclick="addToCart('4K Monitor', 349)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="mouse.jpg" alt="Gaming Mouse" />
+        <h3>Gaming Mouse</h3>
+        <p>$49.00</p>
+        <button onclick="addToCart('Gaming Mouse', 49)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="ssd.jpg" alt="1TB SSD" />
+        <h3>1TB SSD</h3>
+        <p>$129.00</p>
+        <button onclick="addToCart('1TB SSD', 129)">Add to Cart</button>
+      </div>
     </div>
-    <button class="show-more-btn" onclick="window.location.href='more-products.html'">Show More</button>
   </section>
 
   <footer>
@@ -99,32 +113,19 @@
   </footer>
 
   <script>
-    // Add product to cart in localStorage
     function addToCart(name, price) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      // Check if product already in cart
-      const existingProductIndex = cart.findIndex(item => item.name === name);
-      if (existingProductIndex !== -1) {
-        cart[existingProductIndex].quantity++;
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let found = cart.find(item => item.name === name);
+      if (found) {
+        found.qty++;
       } else {
-        cart.push({ name, price, quantity: 1 });
+        cart.push({ name: name, price: price, qty: 1 });
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartCount();
+      localStorage.setItem("cart", JSON.stringify(cart));
       alert(name + " added to cart!");
     }
-
-    // Update cart count on cart icon or link
-    function updateCartCount() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      let count = cart.reduce((sum, item) => sum + item.quantity, 0);
-      const cartLink = document.getElementById('cart-link');
-      cartLink.textContent = `🛒 Cart (${count})`;
-    }
-
-    // Run once page loads
-    window.onload = updateCartCount;
   </script>
+
   <a href="cart.html" id="floating-cart">🛒</a>
 </body>
 </html>

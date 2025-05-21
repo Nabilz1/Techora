@@ -6,33 +6,25 @@
 <title>Techora - Login</title>
 <style>
   * { margin:0; padding:0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-  body { background:#f9f9f9; color:#333; display:flex; flex-direction: column; min-height: 100vh; }
+  body { background:#f9f9f9; color:#333; }
   header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
   nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
   nav ul li { margin:0 15px; }
   nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
   nav ul li a:hover { color:#00bcd4; }
-  main { flex: 1; max-width: 400px; margin: 40px auto; background:#fff; padding:30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-  h2 { text-align:center; margin-bottom: 25px; }
-  label { display:block; margin-bottom: 8px; font-weight: 600; }
-  input[type="text"], input[type="password"] {
-    width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px;
-    font-size: 1rem;
+  section { padding:60px 20px; max-width:400px; margin:auto; }
+  h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
+  form { background:#fff; padding:25px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+  label { display:block; margin-bottom:8px; font-weight:600; }
+  input { width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:5px; font-size:1rem; }
+  button { background:#00bcd4; border:none; color:#fff; padding:12px 20px; border-radius:5px; font-weight:bold; cursor:pointer; transition:background-color 0.3s; }
+  button:hover { background:#007c91; }
+  footer p { font-size:0.9rem; }
+  #floating-cart {
+    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
   }
-  button {
-    width: 100%; padding: 12px; background: #00bcd4; border: none; border-radius: 5px;
-    color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: background-color 0.3s;
-  }
-  button:hover { background: #007c91; }
-  #logout-btn {
-    background: #f44336; margin-top: 15px; display:none;
-  }
-  #welcome-msg {
-    text-align: center; margin-bottom: 20px; font-size: 1.1rem; color: #007c91;
-  }
-  #login-error {
-    color: red; margin-bottom: 15px; text-align: center; display:none;
-  }
+  #floating-cart:hover { background:#007c91; }
+  #error-msg { color: red; margin-bottom: 15px; text-align: center; }
 </style>
 </head>
 <body>
@@ -44,96 +36,81 @@
       <li><a href="products.html">Products</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+      <li id="user-area"><a href="login.html">Login</a></li>
+      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
     </ul>
   </nav>
 </header>
 
-<main>
-  <h2>Login</h2>
-  <div id="welcome-msg"></div>
-  <div id="login-error"></div>
+<section>
+  <h2>Login to Your Account</h2>
+  <div id="error-msg"></div>
   <form id="login-form">
     <label for="username">Username:</label>
-    <input type="text" id="username" required autocomplete="off" />
+    <input type="text" id="username" name="username" required />
+
     <label for="password">Password:</label>
-    <input type="password" id="password" required autocomplete="off" />
-    <button type="submit">Log In</button>
+    <input type="password" id="password" name="password" required />
+
+    <button type="submit">Login</button>
   </form>
-  <button id="logout-btn">Log Out</button>
-</main>
+</section>
 
 <footer>
   <p>&copy; 2025 Techora. All rights reserved.</p>
 </footer>
 
-<script>
-  const loginForm = document.getElementById('login-form');
-  const logoutBtn = document.getElementById('logout-btn');
-  const welcomeMsg = document.getElementById('welcome-msg');
-  const loginError = document.getElementById('login-error');
-  const cartCountSpan = document.querySelector('nav ul li a[href="cart.html"] span');
+<a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
 
-  // Hardcoded example users
-  const users = [
-    { username: 'user1', password: 'pass1' },
-    { username: 'admin', password: 'admin123' }
-  ];
+<script>
+  const cartCountSpan = document.getElementById('cart-count');
+  const floatingCountSpan = document.getElementById('floating-count');
+  const userArea = document.getElementById('user-area');
+  const errorMsg = document.getElementById('error-msg');
 
   function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    if(cartCountSpan) cartCountSpan.textContent = totalCount;
+    cartCountSpan.textContent = totalCount;
+    floatingCountSpan.textContent = totalCount;
   }
 
-  function showLoggedInUI(username) {
-    welcomeMsg.textContent = `Welcome, ${username}!`;
-    loginForm.style.display = 'none';
-    logoutBtn.style.display = 'block';
-  }
-
-  function showLoggedOutUI() {
-    welcomeMsg.textContent = '';
-    loginForm.style.display = 'block';
-    logoutBtn.style.display = 'none';
-  }
-
-  // Check login on page load
-  const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-  if (loggedInUser && loggedInUser.username) {
-    showLoggedInUI(loggedInUser.username);
-  } else {
-    showLoggedOutUI();
-  }
-
-  // Login form submit
-  loginForm.addEventListener('submit', e => {
-    e.preventDefault();
-    loginError.style.display = 'none';
-
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    const user = users.find(u => u.username === username && u.password === password);
-    if (user) {
-      localStorage.setItem('loggedInUser', JSON.stringify({ username: user.username }));
-      showLoggedInUI(user.username);
-      alert('Login successful! You can now proceed to checkout.');
-      updateCartCount();
+  function updateUserArea() {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (loggedInUser && loggedInUser.username) {
+      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${loggedInUser.username}</span> | <a href="#" onclick="logout()">Logout</a>`;
     } else {
-      loginError.textContent = 'Invalid username or password.';
-      loginError.style.display = 'block';
+      userArea.innerHTML = '<a href="login.html">Login</a>';
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.reload();
+  }
+
+  // Dummy user for demo (username: user, password: pass)
+  const dummyUser = { username: 'user', password: 'pass' };
+
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = this.username.value.trim();
+    const password = this.password.value.trim();
+
+    if (username === dummyUser.username && password === dummyUser.password) {
+      localStorage.setItem('loggedInUser', JSON.stringify({ username }));
+      errorMsg.textContent = '';
+      alert('Login successful! Redirecting to Home page...');
+      window.location.href = 'index.html';
+    } else {
+      errorMsg.textContent = 'Invalid username or password.';
     }
   });
 
-  // Logout button
-  logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('loggedInUser');
-    showLoggedOutUI();
-    alert('You have been logged out.');
+  window.addEventListener('load', () => {
+    updateCartCount();
+    updateUserArea();
   });
-
-  updateCartCount();
 </script>
 </body>
 </html>

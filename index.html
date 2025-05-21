@@ -6,15 +6,15 @@
   <title>Techora - Home</title>
   <style>
     * {
-      margin: 0; padding: 0; box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     body {
       background: #f9f9f9;
       color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      line-height: 1.6;
     }
     header, footer {
       background: #222;
@@ -26,8 +26,8 @@
       display: flex;
       justify-content: center;
       list-style: none;
-      flex-wrap: wrap;
       margin-top: 10px;
+      flex-wrap: wrap;
     }
     nav ul li {
       margin: 0 15px;
@@ -36,33 +36,40 @@
       color: white;
       text-decoration: none;
       font-weight: 500;
-      cursor: pointer;
     }
     nav ul li a:hover {
       color: #00bcd4;
     }
-    section {
-      padding: 60px 20px;
+    section#welcome {
+      padding: 60px 20px 40px;
+      text-align: center;
+      max-width: 900px;
+      margin: auto;
+    }
+    section#welcome h1 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      color: #222;
+    }
+    section#welcome p {
+      font-size: 1.3rem;
+      color: #555;
+    }
+    section#featured {
+      padding: 40px 20px 60px;
       max-width: 1200px;
       margin: auto;
-      flex-grow: 1;
     }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    h2 {
+    section#featured h2 {
       text-align: center;
       font-size: 2rem;
       margin-bottom: 30px;
+      color: #222;
     }
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 30px;
-      max-width: 1200px;
-      margin: 0 auto;
     }
     .product {
       background: white;
@@ -70,31 +77,35 @@
       padding: 20px;
       text-align: center;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .product img {
       max-width: 100%;
       height: auto;
       border-radius: 5px;
+      margin-bottom: 15px;
     }
     .product h3 {
-      margin-top: 15px;
+      margin-bottom: 10px;
       font-size: 1.2rem;
     }
     .product p {
-      margin: 10px 0;
       font-size: 1.1rem;
       color: #0097a7;
       font-weight: bold;
+      margin-bottom: 15px;
     }
     .product button {
       background-color: #00bcd4;
       border: none;
       color: white;
-      padding: 10px 15px;
+      padding: 10px;
       border-radius: 5px;
       cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
     }
     .product button:hover {
       background-color: #007c91;
@@ -104,11 +115,15 @@
       margin: 40px auto 0;
       background-color: #00bcd4;
       color: white;
-      padding: 10px 25px;
-      font-size: 1rem;
+      padding: 12px 30px;
+      font-size: 1.1rem;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+      max-width: 200px;
+      text-align: center;
     }
     .show-more-btn:hover {
       background-color: #0097a7;
@@ -116,41 +131,11 @@
     footer p {
       font-size: 0.9rem;
     }
-
     @media (max-width: 768px) {
       nav ul {
         flex-direction: column;
         gap: 10px;
       }
-    }
-
-    #floating-cart {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #00bcd4;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      transition: background-color 0.3s;
-    }
-
-    #floating-cart:hover {
-      background-color: #007c91;
-    }
-
-    .btn.pulse {
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
     }
   </style>
 </head>
@@ -158,22 +143,19 @@
   <header>
     <h1>Techora</h1>
     <nav>
-      <ul id="nav-list">
+      <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="products.html">Products</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-        <!-- Login/logout will be inserted here -->
       </ul>
     </nav>
   </header>
 
   <section id="welcome">
-    <h1>Welcome to Techora!</h1>
-    <p style="text-align:center; max-width:600px; margin: 20px auto; font-size:1.2rem; color:#555;">
-      Your one-stop shop for quality tech products.
-    </p>
+    <h1>Welcome to Techora</h1>
+    <p>Your one-stop shop for the best tech gadgets and accessories.</p>
   </section>
 
   <section id="featured">
@@ -198,66 +180,39 @@
         <button onclick="addToCart('Mechanical Keyboard', 89)">Add to Cart</button>
       </div>
     </div>
-    <button class="show-more-btn" onclick="location.href='products.html'">More Products</button>
+    <button class="show-more-btn" onclick="window.location.href='products.html'">More Products</button>
   </section>
 
   <footer>
     <p>&copy; 2025 Techora. All rights reserved.</p>
   </footer>
 
-  <a href="cart.html" id="floating-cart">🛒</a>
-
   <script>
-    // Cart functions - simplified for demo (You can reuse from your products page)
+    // Simple addToCart function for demo, stores items in localStorage
     function addToCart(name, price) {
-      let cart = JSON.parse(localStorage.getItem('cart')) || {};
-      if(cart[name]) {
-        cart[name].qty += 1;
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      // Check if item exists, increase quantity if yes
+      let item = cart.find(i => i.name === name);
+      if (item) {
+        item.qty++;
       } else {
-        cart[name] = { price: price, qty: 1 };
+        cart.push({ name, price, qty: 1 });
       }
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(name + ' added to cart!');
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(name + " added to cart!");
       updateCartCount();
     }
 
+    // Update cart icon count (optional)
     function updateCartCount() {
-      let cart = JSON.parse(localStorage.getItem('cart')) || {};
-      let count = 0;
-      for(const item in cart) {
-        count += cart[item].qty;
-      }
-      document.getElementById('floating-cart').textContent = `🛒 ${count}`;
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let count = cart.reduce((sum, item) => sum + item.qty, 0);
+      let cartLink = document.getElementById("cart-link");
+      cartLink.textContent = `🛒 Cart (${count})`;
     }
 
-    // Login/logout nav update
-    function updateNavLoginStatus() {
-      const navList = document.getElementById('nav-list');
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      const existing = document.getElementById('login-logout');
-      if(existing) navList.removeChild(existing);
-
-      const li = document.createElement('li');
-      li.id = 'login-logout';
-
-      if(loggedInUser) {
-        li.innerHTML = `<a href="#" onclick="logout()">Logout (${loggedInUser})</a>`;
-      } else {
-        li.innerHTML = `<a href="login.html">Login</a>`;
-      }
-      navList.appendChild(li);
-    }
-
-    function logout() {
-      localStorage.removeItem('loggedInUser');
-      alert('You have been logged out.');
-      updateNavLoginStatus();
-      window.location.href = 'index.html';
-    }
-
-    // Initialize
-    updateNavLoginStatus();
-    updateCartCount();
+    // Call updateCartCount on page load
+    window.onload = updateCartCount;
   </script>
 </body>
 </html>

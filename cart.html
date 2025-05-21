@@ -109,39 +109,35 @@
       font-size: 0.9rem;
       margin-top: 40px;
     }
-  #floating-cart {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #00bcd4;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  transition: background-color 0.3s;
-}
 
-#floating-cart:hover {
-  background-color: #007c91;
-}
+    #floating-cart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #00bcd4;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      transition: background-color 0.3s;
+    }
+
+    #floating-cart:hover {
+      background-color: #007c91;
+    }
 
     .btn.pulse {
-    animation: pulse 2s infinite;
-  }
+      animation: pulse 2s infinite;
+    }
 
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-</style>
-
-<script>
-  document.querySelector('.btn').classList.add('pulse');
-    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 
@@ -149,15 +145,14 @@
   <header>
     <h1>Techora</h1>
     <nav>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="products.html">Products</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-  </ul>
-</nav>
-
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
+      </ul>
+    </nav>
   </header>
 
   <div class="container">
@@ -178,10 +173,18 @@
   <footer>
     <p>&copy; 2025 Techora. All rights reserved.</p>
   </footer>
-</script>
 
-<a href="cart.html" id="floating-cart">🛒</a>
+  <a href="cart.html" id="floating-cart">🛒</a>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const floatingCart = document.getElementById("floating-cart");
+      const count = localStorage.getItem("cartCount") || 0;
+      if (floatingCart) {
+        floatingCart.textContent = `🛒 ${count}`;
+      }
+    });
+  </script>
 </body>
 
 </html>

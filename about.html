@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About - Techora</title>
+  <title>About Us - Techora</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     body { background: #f9f9f9; color: #333; }
@@ -13,14 +13,18 @@
     nav ul li { margin: 0 15px; }
     nav ul li a { color: white; text-decoration: none; font-weight: 500; }
     nav ul li a:hover { color: #00bcd4; }
-    section { padding: 60px 20px; max-width: 1000px; margin: auto; line-height: 1.8; }
-    h2 { text-align: center; font-size: 2rem; margin-bottom: 30px; }
-    p { text-align: center; font-size: 1.1rem; }
-
+    section { padding: 60px 20px; max-width: 1000px; margin: auto; }
+    h2 { text-align: center; font-size: 2.2rem; margin-bottom: 30px; }
+    p { line-height: 1.6; font-size: 1.1rem; margin-bottom: 20px; }
+    .team { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px; }
+    .member { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center; width: 260px; }
+    .member img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; }
+    .member h3 { font-size: 1.2rem; margin-bottom: 5px; }
+    .member span { display: block; font-size: 0.95rem; color: #777; margin-bottom: 10px; }
+    footer p { font-size: 0.9rem; }
     @media (max-width: 768px) {
       nav ul { flex-direction: column; gap: 10px; }
     }
-
     #floating-cart {
       position: fixed;
       bottom: 20px;
@@ -35,23 +39,11 @@
       z-index: 1000;
       transition: background-color 0.3s;
     }
-
-    #floating-cart:hover {
-      background-color: #007c91;
-    }
-
-    .btn.pulse {
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
+    #floating-cart:hover { background-color: #007c91; }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Techora</h1>
     <nav>
@@ -60,40 +52,45 @@
         <li><a href="products.html">Products</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
+        <li><a href="cart.html">🛒 Cart</a></li>
       </ul>
     </nav>
   </header>
 
   <section>
-    <h2>About Us</h2>
-    <p>
-      Techora is your go-to destination for cutting-edge computers, accessories, and electronics.
-      We are passionate about bringing the best technology to your fingertips—whether you're a gamer,
-      a creative professional, or simply someone who appreciates reliable tech.
-    </p>
-    <p style="margin-top: 20px;">
-      Since our founding in 2025, we’ve built a reputation for excellent customer service, high-quality
-      products, and a hassle-free shopping experience both online and offline.
-    </p>
+    <h2>About Techora</h2>
+    <p>At Techora, we're passionate about empowering individuals and businesses with the best in technology. From high-performance laptops to the latest accessories, we provide a curated selection of products to keep you ahead in the digital world.</p>
+    <p>Founded in 2025, our mission has always been to blend innovation with customer satisfaction. Every product we offer is handpicked with performance, reliability, and affordability in mind.</p>
+    <p>We take pride in our excellent customer support and fast delivery service. Whether you're a gamer, a creative, or just someone who loves good tech — Techora is your go-to destination.</p>
+    
+    <h2>Meet the Team</h2>
+    <div class="team">
+      <div class="member">
+        <img src="person1.jpg" alt="Founder" />
+        <h3>Nabil Abu Shawarib</h3>
+        <span>Founder & CEO</span>
+        <p>Visionary behind Techora with a deep love for tech and customer experience.</p>
+      </div>
+      <div class="member">
+        <img src="person2.jpg" alt="CTO" />
+        <h3>Salma Techie</h3>
+        <span>Chief Technology Officer</span>
+        <p>Ensures our tech stays cutting-edge and future-proof.</p>
+      </div>
+      <div class="member">
+        <img src="person3.jpg" alt="Support Lead" />
+        <h3>Omar Friendly</h3>
+        <span>Customer Support Lead</span>
+        <p>Dedicated to helping customers with everything they need.</p>
+      </div>
+    </div>
   </section>
 
   <footer>
     <p>&copy; 2025 Techora. All rights reserved.</p>
   </footer>
 
-  <!-- Floating cart button -->
   <a href="cart.html" id="floating-cart">🛒</a>
 
-  <!-- JS -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const floatingCart = document.getElementById("floating-cart");
-      const count = localStorage.getItem("cartCount") || 0;
-      if (floatingCart) {
-        floatingCart.textContent = `🛒 ${count}`;
-      }
-    });
-  </script>
 </body>
 </html>

@@ -18,18 +18,7 @@
   .product { background:#fff; border-radius:10px; padding:20px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
   .product img { max-width:100%; height:auto; border-radius:5px; }
   .product h3 { margin-top:15px; font-size:1.2rem; }
-  .product .description {
-    font-size: 0.9rem;
-    color: #555;
-    margin: 10px 0 8px;
-    min-height: 40px;
-  }
-  .product .price {
-    font-size: 1.1rem;
-    color: #007c91;
-    font-weight: 700;
-    margin-bottom: 15px;
-  }
+  .product p { margin:10px 0; font-size:1.1rem; color:#0097a7; font-weight:bold; }
   .product button { background:#00bcd4; border:none; color:#fff; padding:10px 15px; border-radius:5px; cursor:pointer; font-weight:bold; transition:background-color 0.3s; }
   .product button:hover { background:#007c91; }
   .show-more-btn { display:block; margin:40px auto 0; background:#00bcd4; color:#fff; padding:10px 25px; font-size:1rem; border:none; border-radius:5px; cursor:pointer; }
@@ -39,6 +28,7 @@
     position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
   }
   #floating-cart:hover { background:#007c91; }
+  a.product-link { text-decoration:none; color: inherit; display:block; }
 </style>
 </head>
 <body>
@@ -71,48 +61,12 @@
 
 <script>
   const products = [
-    { 
-      id: 1, 
-      name: 'Gaming Laptop', 
-      price: 1299.99, 
-      description: 'High-performance gaming laptop with RTX 3060 GPU and 16GB RAM.', 
-      img: 'gaming-laptop.jpg' 
-    },
-    { 
-      id: 2, 
-      name: 'Desktop PC', 
-      price: 899.99, 
-      description: 'Powerful desktop with Intel i7 processor and 1TB SSD.', 
-      img: 'desktop-pc.jpg' 
-    },
-    { 
-      id: 3, 
-      name: 'Mechanical Keyboard', 
-      price: 99.99, 
-      description: 'RGB mechanical keyboard with blue switches for a tactile feel.', 
-      img: 'mechanical-keyboard.jpg' 
-    },
-    { 
-      id: 4, 
-      name: '4K Monitor', 
-      price: 399.99, 
-      description: '27-inch 4K UHD monitor with HDR and 144Hz refresh rate.', 
-      img: '4k-monitor.jpg' 
-    },
-    { 
-      id: 5, 
-      name: 'Gaming Mouse', 
-      price: 59.99, 
-      description: 'Ergonomic gaming mouse with customizable DPI and RGB lighting.', 
-      img: 'gaming-mouse.jpg' 
-    },
-    { 
-      id: 6, 
-      name: '1TB SSD', 
-      price: 139.99, 
-      description: 'Fast 1TB NVMe SSD for blazing-fast storage performance.', 
-      img: '1tb-ssd.jpg' 
-    }
+    { id: 1, name: 'Gaming Laptop', price: 1199, description: "High performance laptop perfect for gaming and work.", images: ['gaming-laptop1.jpg', 'gaming-laptop2.jpg', 'gaming-laptop3.jpg'] },
+    { id: 2, name: 'Desktop PC', price: 999, description: "Powerful desktop PC for all your computing needs.", images: ['desktop1.jpg', 'desktop2.jpg', 'desktop3.jpg'] },
+    { id: 3, name: 'Mechanical Keyboard', price: 89, description: "Responsive and durable keyboard for gamers and typists.", images: ['keyboard1.jpg', 'keyboard2.jpg', 'keyboard3.jpg'] },
+    { id: 4, name: '4K Monitor', price: 349, description: "Ultra HD monitor with crystal clear display.", images: ['monitor1.jpg', 'monitor2.jpg', 'monitor3.jpg'] },
+    { id: 5, name: 'Gaming Mouse', price: 49, description: "Ergonomic mouse with customizable buttons.", images: ['mouse1.jpg', 'mouse2.jpg', 'mouse3.jpg'] },
+    { id: 6, name: '1TB SSD', price: 129, description: "Fast and reliable solid-state drive.", images: ['ssd1.jpg', 'ssd2.jpg', 'ssd3.jpg'] }
   ];
 
   const productGrid = document.getElementById('product-grid');
@@ -126,10 +80,11 @@
       const div = document.createElement('div');
       div.className = 'product';
       div.innerHTML = `
-        <img src="${p.img}" alt="${p.name}" />
-        <h3>${p.name}</h3>
-        <p class="description">${p.description}</p>
-        <p class="price">$${p.price.toFixed(2)}</p>
+        <a href="items.html?id=${p.id}" class="product-link" title="View details of ${p.name}">
+          <img src="${p.images[0]}" alt="${p.name}" />
+          <h3>${p.name}</h3>
+          <p>$${p.price.toFixed(2)}</p>
+        </a>
         <button onclick="addToCart(${p.id})">Add to Cart</button>
       `;
       productGrid.appendChild(div);

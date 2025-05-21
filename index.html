@@ -7,21 +7,16 @@
   <title>Techora - Home</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background: #f5f5f5; color: #333; }
+    body { background: #f9f9f9; color: #333; }
     header, footer { background: #222; color: white; padding: 20px 0; text-align: center; }
-    nav ul { display: flex; justify-content: center; list-style: none; margin-top: 10px; flex-wrap: wrap; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
     nav ul li { margin: 0 15px; }
     nav ul li a { color: white; text-decoration: none; font-weight: 500; }
     nav ul li a:hover { color: #00bcd4; }
-    .hero { background: linear-gradient(to right, #00bcd4, #007c91); padding: 100px 20px; color: white; text-align: center; }
-    .hero h2 { font-size: 2.5rem; margin-bottom: 10px; }
-    .hero p { font-size: 1.2rem; margin-bottom: 20px; }
-    .btn { background: white; color: #00bcd4; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; }
-    .btn:hover { background: #f1f1f1; }
-    footer p { font-size: 0.9rem; }
-    @media (max-width: 768px) {
-      nav ul { flex-direction: column; gap: 10px; }
-    }
+    section { padding: 60px 20px; max-width: 800px; margin: auto; text-align: center; }
+    h2 { font-size: 2rem; margin-bottom: 20px; }
+    p { font-size: 1.1rem; line-height: 1.6; }
+
     #floating-cart {
       position: fixed;
       bottom: 20px;
@@ -36,71 +31,59 @@
       z-index: 1000;
       transition: background-color 0.3s;
     }
+
     #floating-cart:hover {
       background-color: #007c91;
     }
+
     .btn.pulse {
       animation: pulse 2s infinite;
     }
+
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
+
+    @media (max-width: 768px) {
+      nav ul { flex-direction: column; gap: 10px; }
+    }
   </style>
 </head>
-
 <body>
   <header>
     <h1>Techora</h1>
     <nav>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="products.html">Products</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
-  </ul>
-</nav>
-
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="cart.html" id="cart-link">🛒 Cart</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <section class="hero">
-    <h2>Your One-Stop Shop for Computers & Accessories</h2>
-    <p>Explore our wide range of laptops, desktops, parts, and more!</p>
-    <a href="products.html" class="btn">Shop Now</a>
+  <section>
+    <h2>Welcome to Techora</h2>
+    <p>Your one-stop shop for cutting-edge electronics and accessories. Browse our latest products and enjoy seamless shopping with our smart cart system.</p>
   </section>
 
   <footer>
     <p>&copy; 2025 Techora. All rights reserved.</p>
   </footer>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // Animate the main button
-    const shopNowBtn = document.querySelector('.btn');
-    if (shopNowBtn) shopNowBtn.classList.add('pulse');
+  <a href="cart.html" id="floating-cart">🛒<span id="cart-count" style="margin-left:5px;"></span></a>
 
-    // Load cart count from localStorage
-    const count = localStorage.getItem("cartCount") || 0;
-    const floatingCart = document.getElementById("floating-cart");
-    if (floatingCart) {
-      floatingCart.textContent = `🛒 ${count}`;
+  <script>
+    // Initialize cart count on load
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      document.getElementById("cart-count").textContent = cart.length;
     }
 
-    // Smooth scroll for internal anchors (not needed if no "#" links)
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener("click", function(e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute("href")).scrollIntoView({
-          behavior: "smooth"
-        });
-      });
-    });
-  });
-</script>
-
-<a href="cart.html" id="floating-cart">🛒</a>
-
+    updateCartCount();
+  </script>
 </body>
 </html>

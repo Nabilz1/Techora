@@ -4,27 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Checkout - Techora</title>
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script> <!-- Replace 'sb' with live client ID later -->
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-    body { background: #f5f5f5; color: #333; }
-    header, footer { background: #222; color: white; text-align: center; padding: 20px 0; }
-    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
-    nav ul li { margin: 0 15px; }
-    nav ul li a { color: white; text-decoration: none; font-weight: 500; }
-    nav ul li a:hover { color: #00bcd4; }
-    section { max-width: 800px; margin: 40px auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; margin-bottom: 20px; }
-    .summary-table, .delivery-form { width: 100%; margin-bottom: 30px; }
-    .summary-table th, .summary-table td { text-align: left; padding: 10px; border-bottom: 1px solid #ccc; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #ccc; }
-    #paypal-button-container { margin-top: 20px; }
-    #message { text-align: center; color: green; font-weight: bold; }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
+    body { background:#f9f9f9; color:#333; }
+    header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
+    nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
+    nav ul li { margin:0 15px; }
+    nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
+    nav ul li a:hover { color:#00bcd4; }
+    section { padding:40px 20px; max-width:900px; margin:auto; }
+    h2 { text-align:center; margin-bottom:30px; }
+    table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+    th, td { padding:10px 12px; border-bottom:1px solid #ddd; text-align:left; }
+    th { background:#00bcd4; color:#fff; }
+    form { margin-bottom:30px; }
+    label { display:block; margin-bottom:5px; font-weight:bold; }
+    input[type="text"], input[type="tel"] {
+      width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:5px;
+    }
+    #paypal-button-container { margin-top:30px; text-align:center; }
+    #confirmation { background:#d4edda; color:#155724; padding:20px; border-radius:6px; margin-top:20px; display:none; }
   </style>
 </head>
 <body>
-
 <header>
   <h1>Techora</h1>
   <nav>
@@ -41,25 +44,20 @@
 <section>
   <h2>Checkout</h2>
 
-  <div id="message"></div>
+  <div id="order-summary"></div>
 
-  <h3>Order Summary</h3>
-  <table class="summary-table" id="summary-table">
-    <!-- Summary inserted by JS -->
-  </table>
-
-  <h3>Delivery Details</h3>
-  <form class="delivery-form" id="delivery-form">
-    <label for="fullName">Full Name:</label>
-    <input type="text" id="fullName" required />
-    <label for="address">Address:</label>
-    <textarea id="address" rows="3" required></textarea>
-    <label for="phone">Phone Number:</label>
+  <form id="delivery-form">
+    <h3>Delivery Details</h3>
+    <label for="address">Address</label>
+    <input type="text" id="address" required />
+    <label for="city">City</label>
+    <input type="text" id="city" required />
+    <label for="phone">Phone Number</label>
     <input type="tel" id="phone" required />
   </form>
 
-  <h3>Payment</h3>
   <div id="paypal-button-container"></div>
+  <div id="confirmation"></div>
 </section>
 
 <footer>
@@ -67,84 +65,84 @@
 </footer>
 
 <script>
-  // Check login
-  const user = localStorage.getItem('loggedInUser');
+  const cartCountSpan = document.getElementById('cart-count');
+  const user = JSON.parse(localStorage.getItem('user'));
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
   if (!user) {
-    alert('You must be logged in to proceed to checkout.');
+    alert('You must log in before checking out.');
     window.location.href = 'login.html';
   }
 
-  // Load cart and show summary
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const table = document.getElementById('summary-table');
-  const cartCount = document.getElementById('cart-count');
-  const messageDiv = document.getElementById('message');
-
   function updateCartCount() {
     const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCount.textContent = total;
+    cartCountSpan.textContent = total;
   }
 
-  function showSummary() {
+  function showOrderSummary() {
+    const container = document.getElementById('order-summary');
     if (cart.length === 0) {
-      table.innerHTML = '<tr><td colspan="4">Your cart is empty.</td></tr>';
+      container.innerHTML = '<p>Your cart is empty.</p>';
+      document.getElementById('paypal-button-container').style.display = 'none';
       return;
     }
 
-    let html = '<tr><th>Product</th><th>Price</th><th>Qty</th><th>Total</th></tr>';
-    let grandTotal = 0;
-
+    let total = 0;
+    let html = `<h3>Order Summary</h3><table>
+      <thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead><tbody>`;
+    
     cart.forEach(item => {
-      const total = item.price * item.quantity;
-      grandTotal += total;
+      const lineTotal = item.price * item.quantity;
+      total += lineTotal;
       html += `<tr>
         <td>${item.name}</td>
-        <td>$${item.price.toFixed(2)}</td>
         <td>${item.quantity}</td>
-        <td>$${total.toFixed(2)}</td>
+        <td>$${item.price.toFixed(2)}</td>
+        <td>$${lineTotal.toFixed(2)}</td>
       </tr>`;
     });
 
-    html += `<tr>
-      <td colspan="3"><strong>Grand Total:</strong></td>
-      <td><strong>$${grandTotal.toFixed(2)}</strong></td>
-    </tr>`;
-
-    table.innerHTML = html;
+    html += `</tbody></table><h3>Total: $${total.toFixed(2)}</h3>`;
+    container.innerHTML = html;
   }
 
-  updateCartCount();
-  showSummary();
-
-  // PayPal button integration
   paypal.Buttons({
-    createOrder: function(data, actions) {
-      const form = document.getElementById('delivery-form');
-      if (!form.reportValidity()) return;
-
-      const grandTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
+    createOrder: (data, actions) => {
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       return actions.order.create({
         purchase_units: [{
           amount: {
-            value: grandTotal
+            value: total.toFixed(2),
           },
           payee: {
-            email_address: 'Nabil.R1q@gmail.com'
+            email_address: "Nabil.R1q@gmail.com"
           }
         }]
       });
     },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        messageDiv.textContent = 'Payment completed by ' + details.payer.name.given_name + '!';
+    onApprove: (data, actions) => {
+      return actions.order.capture().then(details => {
+        const name = details.payer.name.given_name;
+        const delivery = {
+          address: document.getElementById('address').value,
+          city: document.getElementById('city').value,
+          phone: document.getElementById('phone').value
+        };
         localStorage.removeItem('cart');
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 2500);
+        document.getElementById('confirmation').innerHTML = `
+          <h3>Thank you, ${name}!</h3>
+          <p>Your payment has been received.</p>
+          <p>We will deliver to: ${delivery.address}, ${delivery.city}. Phone: ${delivery.phone}</p>
+        `;
+        document.getElementById('confirmation').style.display = 'block';
+        updateCartCount();
+        showOrderSummary();
       });
     }
   }).render('#paypal-button-container');
-</script>
 
+  updateCartCount();
+  showOrderSummary();
+</script>
 </body>
 </html>

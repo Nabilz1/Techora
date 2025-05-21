@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About Us - Techora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Techora - About</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
     body { background: #f9f9f9; color: #333; }
@@ -12,9 +12,13 @@
     nav ul li { margin: 0 15px; }
     nav ul li a { color: white; text-decoration: none; font-weight: 500; }
     nav ul li a:hover { color: #00bcd4; }
-    section { max-width: 1000px; margin: 60px auto; padding: 0 20px; }
-    h2 { text-align: center; font-size: 2.2rem; margin-bottom: 30px; }
-    p { font-size: 1.1rem; line-height: 1.7; margin-bottom: 20px; }
+
+    section { max-width: 800px; margin: 60px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; margin-bottom: 30px; font-size: 2rem; }
+    p { line-height: 1.6; font-size: 1.1rem; }
+
+    footer p { font-size: 0.9rem; }
+
     #floating-cart {
       position: fixed;
       bottom: 20px;
@@ -27,7 +31,6 @@
       text-decoration: none;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       z-index: 1000;
-      transition: background-color 0.3s;
     }
 
     #floating-cart:hover {
@@ -49,7 +52,7 @@
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="cart.html">🛒 Cart</a></li>
-        <li><a href="login.html" id="login-link">Login</a></li>
+        <li id="user-area"><a href="login.html">Login</a></li>
       </ul>
     </nav>
   </header>
@@ -57,14 +60,18 @@
   <section>
     <h2>About Techora</h2>
     <p>
-      Techora was founded in 2025 with a single mission: to deliver top-notch technology products at competitive prices. 
-      Whether you're a hardcore gamer, a home office professional, or simply passionate about electronics, we have something for you.
+      Welcome to Techora! We are dedicated to providing high-quality technology products
+      that empower your work, gaming, and daily life. Our passion for innovation drives us
+      to offer the latest laptops, desktops, accessories, and more — all carefully selected
+      to meet your needs.
     </p>
     <p>
-      Our team is made up of tech enthusiasts who believe in quality, innovation, and great service. We source only the best gear – from cutting-edge laptops and desktops to accessories that enhance your everyday life.
+      At Techora, customer satisfaction is our top priority. We strive to offer
+      outstanding support and service to ensure your shopping experience is seamless
+      and enjoyable.
     </p>
     <p>
-      Based in Jeddah, Techora also offers installation services and expert advice tailored to your needs. With our online platform, we aim to make tech shopping easy, transparent, and enjoyable.
+      Thank you for choosing Techora for your tech needs. We look forward to serving you!
     </p>
   </section>
 
@@ -75,12 +82,22 @@
   <a href="cart.html" id="floating-cart">🛒</a>
 
   <script>
-    const username = localStorage.getItem("username");
-    const loginLink = document.getElementById("login-link");
-    if (username) {
-      loginLink.textContent = `👤 ${username}`;
-      loginLink.href = "#";
+    function updateUserArea() {
+      const userArea = document.getElementById("user-area");
+      const username = localStorage.getItem("username");
+      if (username) {
+        userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${username}</span> | <a href="#" onclick="logout()">Logout</a>`;
+      } else {
+        userArea.innerHTML = '<a href="login.html">Login</a>';
+      }
     }
+
+    function logout() {
+      localStorage.removeItem("username");
+      window.location.reload();
+    }
+
+    updateUserArea();
   </script>
 </body>
 </html>

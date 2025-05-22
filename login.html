@@ -5,89 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login - Techora</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    body {
-      margin: 0;
-      background: #0f172a;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background: #0f2027; background: linear-gradient(to right, #2c5364, #203a43, #0f2027); height: 100vh; display: flex; align-items: center; justify-content: center; }
+
     .wrapper {
       width: 100%;
       max-width: 400px;
-      padding: 20px;
+      position: relative;
     }
+
     .card-switch {
       position: relative;
     }
+
     .switch {
-      display: block;
-      position: relative;
-      width: 100%;
+      position: absolute;
+      right: 0;
+      top: -50px;
     }
-    .slider {
+
+    .switch .toggle {
       display: none;
     }
-    .flip-card__inner {
-      background: #1e293b;
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
       border-radius: 15px;
-      padding: 40px 20px;
-      position: relative;
-      perspective: 1000px;
-      transform-style: preserve-3d;
-      transition: transform 0.8s ease;
+      transition: .4s;
     }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: .4s;
+    }
+
+    .toggle:checked + .slider::before {
+      transform: translateX(30px);
+    }
+
+    .flip-card__inner {
+      perspective: 1000px;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
     .toggle:checked ~ .flip-card__inner {
       transform: rotateY(180deg);
     }
+
     .flip-card__front, .flip-card__back {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      backface-visibility: hidden;
       position: absolute;
       width: 100%;
-      backface-visibility: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-    .flip-card__front {
-      transform: rotateY(0deg);
-    }
+
     .flip-card__back {
       transform: rotateY(180deg);
     }
+
     .title {
-      font-size: 24px;
       text-align: center;
+      font-size: 24px;
       margin-bottom: 20px;
+      color: #333;
     }
+
     .flip-card__form {
       display: flex;
       flex-direction: column;
     }
+
     .flip-card__input {
       margin-bottom: 15px;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
+      padding: 10px;
       font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
+
     .flip-card__btn {
-      padding: 12px;
-      background: #00bcd4;
-      border: none;
+      background-color: #00bcd4;
       color: white;
+      border: none;
+      padding: 12px;
       font-size: 1rem;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       transition: background 0.3s;
     }
+
     .flip-card__btn:hover {
-      background: #0097a7;
-    }
-    .card-side {
-      display: none;
+      background-color: #0097a7;
     }
   </style>
 </head>
@@ -100,21 +123,20 @@
       <span class="slider"></span>
       <span class="card-side"></span>
       <div class="flip-card__inner">
-        <!-- Login -->
+        <!-- Login Side -->
         <div class="flip-card__front">
           <div class="title">Log in</div>
-          <form class="flip-card__form" id="login-form">
+          <form class="flip-card__form" onsubmit="handleLogin(event)">
             <input class="flip-card__input" name="email" placeholder="Email" type="email" required>
             <input class="flip-card__input" name="password" placeholder="Password" type="password" required>
-            <button class="flip-card__btn" type="submit">Let`s go!</button>
+            <button class="flip-card__btn" type="submit">Let's go!</button>
           </form>
         </div>
-
-        <!-- Sign Up -->
+        <!-- Sign Up Side -->
         <div class="flip-card__back">
           <div class="title">Sign up</div>
-          <form class="flip-card__form" id="signup-form">
-            <input class="flip-card__input" name="name" placeholder="Name" type="text" required>
+          <form class="flip-card__form" onsubmit="handleSignup(event)">
+            <input class="flip-card__input" placeholder="Name" name="name" type="text" required>
             <input class="flip-card__input" name="email" placeholder="Email" type="email" required>
             <input class="flip-card__input" name="password" placeholder="Password" type="password" required>
             <button class="flip-card__btn" type="submit">Confirm!</button>
@@ -126,38 +148,39 @@
 </div>
 
 <script>
-  // Login
-  document.getElementById("login-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const email = this.email.value.trim();
-    const password = this.password.value.trim();
+  function handleLogin(event) {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    // Simple localStorage check for demo
     const storedEmail = localStorage.getItem("user_email");
     const storedPassword = localStorage.getItem("user_password");
-    const storedName = localStorage.getItem("username");
 
     if (email === storedEmail && password === storedPassword) {
+      localStorage.setItem("username", email.split("@")[0]);
       alert("Login successful!");
-      localStorage.setItem("username", storedName);
       window.location.href = "index.html";
     } else {
-      alert("Invalid email or password!");
+      alert("Invalid credentials!");
     }
-  });
+  }
 
-  // Sign Up
-  document.getElementById("signup-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const name = this.name.value.trim();
-    const email = this.email.value.trim();
-    const password = this.password.value.trim();
+  function handleSignup(event) {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
 
     localStorage.setItem("username", name);
     localStorage.setItem("user_email", email);
     localStorage.setItem("user_password", password);
 
-    alert("Sign up successful! You can now log in.");
-    window.location.reload();
-  });
+    alert("Signup successful! You can now log in.");
+    window.location.href = "login.html";
+  }
 </script>
 
 </body>

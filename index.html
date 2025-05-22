@@ -2,47 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Techora - Home</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    body {
-      background: #f9f9f9;
-      color: #333;
-    }
-    header, footer {
-      background: #222;
-      color: #fff;
-      padding: 20px 0;
-      text-align: center;
-    }
-    nav ul {
-      display: flex;
-      justify-content: center;
-      list-style: none;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    nav ul li {
-      margin: 0 15px;
-    }
-    nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    nav ul li a:hover {
-      color: #00bcd4;
-    }
-    footer p {
-      font-size: 0.9rem;
-      margin-top: 10px;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f9f9f9; color: #333; }
+    header, footer { background: #222; color: #fff; padding: 20px 0; text-align: center; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+    main { padding: 40px 20px; text-align: center; }
+    h1 { font-size: 2.5rem; margin-bottom: 20px; }
+    p { font-size: 1.2rem; max-width: 800px; margin: auto; }
 
     /* Featured Products Marquee */
     .marquee {
@@ -93,6 +65,8 @@
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
+
+    footer p { font-size: 0.9rem; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -111,7 +85,12 @@
   </nav>
 </header>
 
-<!-- Featured Products Section -->
+<main>
+  <h1>Welcome to Techora</h1>
+  <p>Your one-stop shop for high-quality surveillance and smart security products. Explore our wide range of cameras, DVR systems, and accessories tailored for homes, businesses, and stations.</p>
+</main>
+
+<!-- Featured Products Marquee -->
 <section class="marquee">
   <div class="marquee_header">🔥 Featured Products</div>
   <div class="marquee__inner">
@@ -135,7 +114,7 @@
 </footer>
 
 <script>
-  // Show username and cart count
+  // Show cart count and user login status
   const cartCountSpan = document.getElementById('cart-count');
   const userArea = document.getElementById('user-area');
 

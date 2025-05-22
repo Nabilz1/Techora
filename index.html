@@ -2,36 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Techora - Home</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
-    body { background:#f9f9f9; color:#333; }
-    header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
-    nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
-    nav ul li { margin:0 15px; }
-    nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
-    nav ul li a:hover { color:#00bcd4; }
-    section { padding:60px 20px; max-width:1200px; margin:auto; }
-    h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
-    .product-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px; }
-    .product { background:#fff; border-radius:10px; padding:20px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-    .product img { max-width:100%; height:auto; border-radius:5px; }
-    .product h3 { margin-top:15px; font-size:1.2rem; }
-    .product p { margin:10px 0; font-size:1.1rem; color:#0097a7; font-weight:bold; }
-    .more-btn {
-      display:block; margin:40px auto 0; background:#00bcd4; color:#fff; padding:12px 25px;
-      font-size:1rem; border:none; border-radius:5px; cursor:pointer; text-align:center; text-decoration:none;
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+    body { background: #f7f7f7; color: #333; }
+
+    header, footer {
+      background: #222; color: white; text-align: center; padding: 20px 0;
     }
-    .more-btn:hover { background:#0097a7; }
-    #floating-cart {
-      position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px;
-      border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
+
+    nav ul {
+      display: flex; justify-content: center; gap: 20px; list-style: none; margin-top: 10px; flex-wrap: wrap;
     }
-    #floating-cart:hover { background:#007c91; }
+
+    nav ul li a {
+      color: white; text-decoration: none; font-weight: 500;
+    }
+
+    nav ul li a:hover {
+      color: #00bcd4;
+    }
+
+    .hero {
+      padding: 60px 20px; text-align: center; background: #e0f7fa;
+    }
+
+    .hero h1 {
+      font-size: 3rem; margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.3rem; margin-bottom: 30px;
+    }
+
+    .hero a {
+      padding: 12px 25px; background: #00bcd4; color: white; text-decoration: none; border-radius: 6px;
+    }
+
+    .hero a:hover {
+      background: #007c91;
+    }
+
+    .featured {
+      padding: 50px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .featured h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      width: 240px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .product h3 {
+      margin: 10px 0;
+      font-size: 1.2rem;
+    }
+
+    .product span {
+      font-weight: bold;
+      color: #00bcd4;
+      display: block;
+      margin-top: 5px;
+    }
+
+    footer {
+      margin-top: 40px;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Techora</h1>
     <nav>
@@ -40,77 +120,55 @@
         <li><a href="products.html">Products</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li id="user-area"><a href="login.html">Login</a></li>
         <li><a href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a></li>
       </ul>
     </nav>
   </header>
 
-  <section>
+  <section class="hero">
+    <h1>Welcome to Techora</h1>
+    <p>Your hub for cutting-edge tech gear</p>
+    <a href="products.html">Browse Products</a>
+  </section>
+
+  <section class="featured">
     <h2>Featured Products</h2>
-    <div class="product-grid" id="featured-products">
-      <!-- Filled by JS -->
+    <div class="products">
+      <a class="product" href="items.html?id=1">
+        <img src="laptop1.jpg" alt="Gaming Laptop" />
+        <h3>Gaming Laptop</h3>
+        <span>$1199</span>
+      </a>
+      <a class="product" href="items.html?id=2">
+        <img src="desktop1.jpg" alt="Desktop PC" />
+        <h3>Desktop PC</h3>
+        <span>$999</span>
+      </a>
+      <a class="product" href="items.html?id=3">
+        <img src="keyboard1.jpg" alt="Mechanical Keyboard" />
+        <h3>Mechanical Keyboard</h3>
+        <span>$89</span>
+      </a>
+      <a class="product" href="items.html?id=4">
+        <img src="monitor1.jpg" alt="4K Monitor" />
+        <h3>4K Monitor</h3>
+        <span>$349</span>
+      </a>
     </div>
-    <a class="more-btn" href="products.html">More Products</a>
   </section>
 
   <footer>
     <p>&copy; 2025 Techora. All rights reserved.</p>
   </footer>
 
-  <a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
-
   <script>
-    const featured = [
-      { id: 1, name: 'Gaming Laptop', price: 1199, img: 'laptop.jpg' },
-      { id: 2, name: '4K Monitor', price: 349, img: 'monitor.jpg' },
-      { id: 3, name: 'Mechanical Keyboard', price: 89, img: 'keyboard.jpg' }
-    ];
-
-    const featuredContainer = document.getElementById('featured-products');
-    const cartCountSpan = document.getElementById('cart-count');
-    const floatingCountSpan = document.getElementById('floating-count');
-    const userArea = document.getElementById('user-area');
-
-    function renderFeatured() {
-      featured.forEach(p => {
-        const div = document.createElement('div');
-        div.className = 'product';
-        div.innerHTML = `
-          <img src="${p.img}" alt="${p.name}" />
-          <h3>${p.name}</h3>
-          <p>$${p.price.toFixed(2)}</p>
-        `;
-        featuredContainer.appendChild(div);
-      });
-    }
-
     function updateCartCount() {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-      cartCountSpan.textContent = total;
-      floatingCountSpan.textContent = total;
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cart-count").textContent = count;
     }
-
-    function updateUserArea() {
-      const user = JSON.parse(localStorage.getItem("loggedInUser"));
-      if (user && user.username) {
-        userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${user.username}</span> | <a href="#" onclick="logout()">Logout</a>`;
-      } else {
-        userArea.innerHTML = '<a href="login.html">Login</a>';
-      }
-    }
-
-    function logout() {
-      localStorage.removeItem("loggedInUser");
-      window.location.reload();
-    }
-
-    window.addEventListener('load', () => {
-      renderFeatured();
-      updateCartCount();
-      updateUserArea();
-    });
+    window.addEventListener("load", updateCartCount);
   </script>
+
 </body>
 </html>

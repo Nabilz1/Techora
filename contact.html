@@ -1,30 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Techora - Contact</title>
-<style>
-  * { margin:0; padding:0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-  body { background:#f9f9f9; color:#333; }
-  header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
-  nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
-  nav ul li { margin:0 15px; }
-  nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
-  nav ul li a:hover { color:#00bcd4; }
-  section { padding:60px 20px; max-width:600px; margin:auto; }
-  h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
-  form { background:#fff; padding:25px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-  label { display:block; margin-bottom:8px; font-weight:600; }
-  input, textarea { width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:5px; font-size:1rem; }
-  button { background:#00bcd4; border:none; color:#fff; padding:12px 20px; border-radius:5px; font-weight:bold; cursor:pointer; transition:background-color 0.3s; }
-  button:hover { background:#007c91; }
-  footer p { font-size:0.9rem; text-align:center; }
-  #floating-cart {
-    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
-  }
-  #floating-cart:hover { background:#007c91; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Us - Techora</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: #f9f9f9; color: #333; }
+    header, footer { background: #222; color: #fff; padding: 20px 0; text-align: center; }
+    nav ul { display: flex; justify-content: center; list-style: none; flex-wrap: wrap; margin-top: 10px; }
+    nav ul li { margin: 0 15px; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; }
+    nav ul li a:hover { color: #00bcd4; }
+
+    section { padding: 60px 20px; max-width: 800px; margin: auto; }
+    h2 { text-align: center; font-size: 2rem; margin-bottom: 30px; }
+
+    form { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    form input, form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    form button {
+      background: #00bcd4;
+      border: none;
+      color: white;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    form button:hover {
+      background: #0097a7;
+    }
+
+    .message-success {
+      background: #dff0d8;
+      color: #3c763d;
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    footer p { font-size: 0.9rem; margin-top: 10px; }
+  </style>
 </head>
 <body>
 <header>
@@ -36,23 +62,20 @@
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li id="user-area"><a href="login.html">Login</a></li>
-      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
+      <li><a href="cart.html">🛒 Cart (<span id="cart-count">0</span>)</a></li>
     </ul>
   </nav>
 </header>
 
 <section>
   <h2>Contact Us</h2>
-  <form id="contact-form">
-    <label for="name">Your Name:</label>
-    <input type="text" id="name" name="name" required />
 
-    <label for="email">Your Email:</label>
-    <input type="email" id="email" name="email" required />
+  <form action="https://formspree.io/f/mwpojlwn" method="POST">
+    <div class="message-success" id="success-msg">Thank you! Your message has been sent.</div>
 
-    <label for="message">Message:</label>
-    <textarea id="message" name="message" rows="5" required></textarea>
-
+    <input type="text" name="name" placeholder="Your Name" required />
+    <input type="email" name="email" placeholder="Your Email" required />
+    <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
     <button type="submit">Send Message</button>
   </form>
 </section>
@@ -61,43 +84,41 @@
   <p>&copy; 2025 Techora. All rights reserved.</p>
 </footer>
 
-<a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
-
 <script>
+  // Show username and cart count
   const cartCountSpan = document.getElementById('cart-count');
-  const floatingCountSpan = document.getElementById('floating-count');
   const userArea = document.getElementById('user-area');
 
   function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCountSpan.textContent = totalCount;
-    floatingCountSpan.textContent = totalCount;
   }
 
   function updateUserArea() {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (loggedInUser && loggedInUser.username) {
-      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${loggedInUser.username}</span> | <a href="#" onclick="logout()">Logout</a>`;
+    const username = localStorage.getItem("username");
+    if (username) {
+      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${username}</span> | <a href="#" onclick="logout()">Logout</a>`;
     } else {
       userArea.innerHTML = '<a href="login.html">Login</a>';
     }
   }
 
   function logout() {
-    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("username");
     window.location.reload();
   }
 
-  window.addEventListener('load', () => {
+  // Optional: handle success message (only if Formspree redirects back)
+  document.addEventListener('DOMContentLoaded', () => {
     updateCartCount();
     updateUserArea();
-  });
 
-  document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Thank you for contacting us, ' + this.name.value + '!');
-    this.reset();
+    const successMsg = document.getElementById('success-msg');
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('success')) {
+      successMsg.style.display = 'block';
+    }
   });
 </script>
 </body>

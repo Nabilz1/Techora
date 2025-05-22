@@ -1,116 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Techora - Login</title>
-<style>
-  * { margin:0; padding:0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-  body { background:#f9f9f9; color:#333; }
-  header, footer { background:#222; color:#fff; padding:20px 0; text-align:center; }
-  nav ul { display:flex; justify-content:center; list-style:none; flex-wrap:wrap; margin-top:10px; }
-  nav ul li { margin:0 15px; }
-  nav ul li a { color:#fff; text-decoration:none; font-weight:500; }
-  nav ul li a:hover { color:#00bcd4; }
-  section { padding:60px 20px; max-width:400px; margin:auto; }
-  h2 { text-align:center; font-size:2rem; margin-bottom:30px; }
-  form { background:#fff; padding:25px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-  label { display:block; margin-bottom:8px; font-weight:600; }
-  input { width:100%; padding:10px; margin-bottom:20px; border:1px solid #ccc; border-radius:5px; font-size:1rem; }
-  button { background:#00bcd4; border:none; color:#fff; padding:12px 20px; border-radius:5px; font-weight:bold; cursor:pointer; transition:background-color 0.3s; }
-  button:hover { background:#007c91; }
-  footer p { font-size:0.9rem; }
-  #floating-cart {
-    position: fixed; bottom: 20px; right: 20px; background:#00bcd4; color:#fff; padding:12px 18px; border-radius:50%; font-size:1.2rem; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.2); z-index:1000;
-  }
-  #floating-cart:hover { background:#007c91; }
-  #error-msg { color: red; margin-bottom: 15px; text-align: center; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Techora</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .wrapper {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+    }
+    .card-switch {
+      position: relative;
+    }
+    .switch {
+      display: block;
+      position: relative;
+      width: 100%;
+    }
+    .slider {
+      display: none;
+    }
+    .flip-card__inner {
+      background: #1e293b;
+      border-radius: 15px;
+      padding: 40px 20px;
+      position: relative;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+      transition: transform 0.8s ease;
+    }
+    .toggle:checked ~ .flip-card__inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card__front, .flip-card__back {
+      position: absolute;
+      width: 100%;
+      backface-visibility: hidden;
+    }
+    .flip-card__front {
+      transform: rotateY(0deg);
+    }
+    .flip-card__back {
+      transform: rotateY(180deg);
+    }
+    .title {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .flip-card__form {
+      display: flex;
+      flex-direction: column;
+    }
+    .flip-card__input {
+      margin-bottom: 15px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .flip-card__btn {
+      padding: 12px;
+      background: #00bcd4;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .flip-card__btn:hover {
+      background: #0097a7;
+    }
+    .card-side {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Techora</h1>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="products.html">Products</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li id="user-area"><a href="login.html">Login</a></li>
-      <li><a href="cart.html" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
-    </ul>
-  </nav>
-</header>
 
-<section>
-  <h2>Login to Your Account</h2>
-  <div id="error-msg"></div>
-  <form id="login-form">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required />
+<div class="wrapper">
+  <div class="card-switch">
+    <label class="switch">
+      <input type="checkbox" class="toggle">
+      <span class="slider"></span>
+      <span class="card-side"></span>
+      <div class="flip-card__inner">
+        <!-- Login -->
+        <div class="flip-card__front">
+          <div class="title">Log in</div>
+          <form class="flip-card__form" id="login-form">
+            <input class="flip-card__input" name="email" placeholder="Email" type="email" required>
+            <input class="flip-card__input" name="password" placeholder="Password" type="password" required>
+            <button class="flip-card__btn" type="submit">Let`s go!</button>
+          </form>
+        </div>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-
-    <button type="submit">Login</button>
-  </form>
-</section>
-
-<footer>
-  <p>&copy; 2025 Techora. All rights reserved.</p>
-</footer>
-
-<a href="cart.html" id="floating-cart">🛒 (<span id="floating-count">0</span>)</a>
+        <!-- Sign Up -->
+        <div class="flip-card__back">
+          <div class="title">Sign up</div>
+          <form class="flip-card__form" id="signup-form">
+            <input class="flip-card__input" name="name" placeholder="Name" type="text" required>
+            <input class="flip-card__input" name="email" placeholder="Email" type="email" required>
+            <input class="flip-card__input" name="password" placeholder="Password" type="password" required>
+            <button class="flip-card__btn" type="submit">Confirm!</button>
+          </form>
+        </div>
+      </div>
+    </label>
+  </div>
+</div>
 
 <script>
-  const cartCountSpan = document.getElementById('cart-count');
-  const floatingCountSpan = document.getElementById('floating-count');
-  const userArea = document.getElementById('user-area');
-  const errorMsg = document.getElementById('error-msg');
-
-  function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-    cartCountSpan.textContent = totalCount;
-    floatingCountSpan.textContent = totalCount;
-  }
-
-  function updateUserArea() {
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (loggedInUser && loggedInUser.username) {
-      userArea.innerHTML = `<span style="color:#00bcd4;">👤 ${loggedInUser.username}</span> | <a href="#" onclick="logout()">Logout</a>`;
-    } else {
-      userArea.innerHTML = '<a href="login.html">Login</a>';
-    }
-  }
-
-  function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.reload();
-  }
-
-  // Dummy user for demo (username: user, password: pass)
-  const dummyUser = { username: 'user', password: 'pass' };
-
-  document.getElementById('login-form').addEventListener('submit', function(e) {
+  // Login
+  document.getElementById("login-form").addEventListener("submit", function(e) {
     e.preventDefault();
-    const username = this.username.value.trim();
+    const email = this.email.value.trim();
+    const password = this.password.value.trim();
+    const storedEmail = localStorage.getItem("user_email");
+    const storedPassword = localStorage.getItem("user_password");
+    const storedName = localStorage.getItem("username");
+
+    if (email === storedEmail && password === storedPassword) {
+      alert("Login successful!");
+      localStorage.setItem("username", storedName);
+      window.location.href = "index.html";
+    } else {
+      alert("Invalid email or password!");
+    }
+  });
+
+  // Sign Up
+  document.getElementById("signup-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const name = this.name.value.trim();
+    const email = this.email.value.trim();
     const password = this.password.value.trim();
 
-    if (username === dummyUser.username && password === dummyUser.password) {
-      localStorage.setItem('loggedInUser', JSON.stringify({ username }));
-      errorMsg.textContent = '';
-      alert('Login successful! Redirecting to Home page...');
-      window.location.href = 'index.html';
-    } else {
-      errorMsg.textContent = 'Invalid username or password.';
-    }
-  });
+    localStorage.setItem("username", name);
+    localStorage.setItem("user_email", email);
+    localStorage.setItem("user_password", password);
 
-  window.addEventListener('load', () => {
-    updateCartCount();
-    updateUserArea();
+    alert("Sign up successful! You can now log in.");
+    window.location.reload();
   });
 </script>
+
 </body>
 </html>

@@ -19,10 +19,12 @@
     /* Featured Products Marquee */
     .marquee {
       overflow: hidden;
+      margin: 60px 0;
       padding: 40px 0;
       background: #fff;
       border-top: 2px solid #eee;
       border-bottom: 2px solid #eee;
+      position: relative;
     }
     .marquee_header {
       text-align: center;
@@ -30,6 +32,10 @@
       margin-bottom: 20px;
       color: #00bcd4;
       font-weight: bold;
+    }
+    .marquee__track {
+      overflow: hidden;
+      width: 100%;
     }
     .marquee__inner {
       display: flex;
@@ -93,18 +99,20 @@
 <!-- Featured Products Marquee -->
 <section class="marquee">
   <div class="marquee_header">🔥 Featured Products</div>
-  <div class="marquee__inner">
-    <div class="marquee__group">
-      <a href="items.html?id=1"><img src="gaming-laptop1.jpg" alt="Product 1"><span>Gaming Laptop</span></a>
-      <a href="items.html?id=2"><img src="desktop1.jpg" alt="Product 2"><span>Desktop PC</span></a>
-      <a href="items.html?id=3"><img src="keyboard1.jpg" alt="Product 3"><span>Mechanical Keyboard</span></a>
-      <a href="items.html?id=4"><img src="monitor1.jpg" alt="Product 4"><span>4k monitor</span></a>
-    </div>
-    <div class="marquee__group">
-      <a href="items.html?id=1"><img src="gaming-laptop1.jpg" alt="Product 1"><span>Gaming Laptop</span></a>
-      <a href="items.html?id=2"><img src="desktop1.jpg" alt="Product 2"><span>Desktop PC</span></a>
-      <a href="items.html?id=3"><img src="keyboard1.jpg" alt="Product 3"><span>Mechanical Keyboard</span></a>
-      <a href="items.html?id=4"><img src="monitor1.jpg" alt="Product 4"><span>4k monitor</span></a>
+  <div class="marquee__track">
+    <div class="marquee__inner">
+      <div class="marquee__group">
+        <a href="items.html?id=1"><img src="gaming-laptop1.jpg" alt="Product 1"><span>Gaming Laptop</span></a>
+        <a href="items.html?id=2"><img src="desktop1.jpg" alt="Product 2"><span>Desktop PC</span></a>
+        <a href="items.html?id=3"><img src="keyboard1.jpg" alt="Product 3"><span>Mechanical Keyboard</span></a>
+        <a href="items.html?id=4"><img src="monitor1.jpg" alt="Product 4"><span>4k Monitor</span></a>
+      </div>
+      <div class="marquee__group">
+        <a href="items.html?id=1"><img src="gaming-laptop1.jpg" alt="Product 1"><span>Gaming Laptop</span></a>
+        <a href="items.html?id=2"><img src="desktop1.jpg" alt="Product 2"><span>Desktop PC</span></a>
+        <a href="items.html?id=3"><img src="keyboard1.jpg" alt="Product 3"><span>Mechanical Keyboard</span></a>
+        <a href="items.html?id=4"><img src="monitor1.jpg" alt="Product 4"><span>4k Monitor</span></a>
+      </div>
     </div>
   </div>
 </section>
